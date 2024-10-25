@@ -4,9 +4,9 @@ description: SUSE Observability Self-hosted
 
 # Migrating from StackState 6.x to SUSE Observability
 
-Due to the rename of the product and also due to breaking changes in the topology data format it is not possible to simply upgrade from StackState to SUSE Observability. This migration guide will help you set up SUSE Observability exactly the same as StackState.
+Due to the rename of the product and also due to breaking changes in the topology data format it is not possible to upgrade from StackState to SUSE Observability via a standard Helm upgrade command. This migration guide will help you set up SUSE Observability exactly the same as StackState.
 
-SUSE Observability will be a new installation, without the already existing historical data. **Optionally** the historical data can be kept accessible until SUSE Observability has built up sufficient history. This guide describes both scenarios separately. 
+SUSE Observability will be a new installation, without the already existing historical data. **Optionally** the historical data can be kept accessible until SUSE Observability has built up sufficient history. This guide covers both scenarios. 
 
 Depending on the chosen scenario the steps to migrate are different. Running side-by-side is slightly more complicated and will require more resources. The overall steps, applicable to both scenarios are:
 1. Install the latest version of StackState 6.x
@@ -24,7 +24,7 @@ Throughout this guide all examples assume the following setup, customize the com
 
 ## Install latest version of StackState 6.x
 
-Only the latest version of StackState 6.x has a backup format that contains all configuration in a format that is compatible with SUSE Observability. Please make sure you have the latest version installed by running `helm list --namespace stackstate` (use the namespace where StackState is installed):
+Only the latest version of StackState 6.x has a configuration backup that contains all configuration in a format that is compatible with SUSE Observability. Please make sure you have the latest version installed by running `helm list --namespace stackstate` (use the namespace where StackState is installed):
 
 * Helm chart version should be `1.12.0`
 * Application version should be `6.0.0-snapshot.20241023094532-stackstate-6.x-7be52ad`
@@ -55,7 +55,7 @@ You should now have the configuration backup file on your computer.
 
 ## Install and configure SUSE Observability
 
-This is where the 2 options are different. Follow the instructions for one of the two.
+This is where the 2 options are different. Follow the instructions for your preferred scenario.
 
 {% tabs %}
 {% tab title="Replace StackState" %}
@@ -284,15 +284,12 @@ Migrating is an easy 2 step process:
 1. Uninstall the StackState agent
 2. Install the SUSE Observability agent
 
-### Uninstall the StackState agent
-It is important this is done first, because it is not possible to run both agents at the same time. Uninstalling the agent on a cluster, using the default namespace an release name from the agent installation docs, is done like this:
+It is important the old agent is uninstalled first, because it is not possible to run both agents at the same time. Uninstalling the agent on a cluster is done like this:
 
 ```bash
 helm uninstall -n stackstate stackstate-k8s-agent
 ```
 
-In case you used a different namespace or cluster update the command accordingly.
+In case you used a different namespace or release name update the command accordingly.
 
-### Install the SUSE Observabilty agent
-
-Navigate to `https://your-stackstate-instance/#/stackpacks/kubernetes-v2`. Find the cluster in the list of StackPack instances and copy and run the helm install command for your Kubernetes distribution on the cluster that you are migrating. If you have custom values you can include them without modification with a `--values` argument, the SUSE Observability agent values use the same naming as the StackState agent.
+Navigate to `https://your-stackstate-instance/#/stackpacks/kubernetes-v2`. Find the cluster you're upgrading the agent on in the list of StackPack instances and copy and run the helm install command for your Kubernetes distribution. If you have custom values you can include them without modification with a `--values` argument, the SUSE Observability agent values use the same naming as the StackState agent.
