@@ -9,7 +9,7 @@ Due to the rename of the product and also due to breaking changes in the topolog
 SUSE Observability will be a new installation, without the already existing historical data. **Optionally** the historical data can be kept accessible until SUSE Observability has built up sufficient history. This guide describes both scenarios separately. 
 
 Depending on the chosen scenario the steps to migrate are different. Running side-by-side is slightly more complicated and will require more resources. The overall steps, applicable to both scenarios are:
-1. Make sure the latest version of StackState 6.x is installed
+1. Install the latest version of StackState 6.x
 2. Create and download a configuration backup
 3. Install and configure SUSE Observability, scenario specific steps
 4. Update Open Telemetry collectors configuration
@@ -29,9 +29,9 @@ Only the latest version of StackState 6.x has a backup format that contains all 
 * Helm chart version should be `1.12.0`
 * Application version should be `6.0.0-snapshot.20241023094532-stackstate-6.x-7be52ad`
 
-If you don't have that version please upgrade first following the standard [upgrade steps](./steps-to-upgrade.md#minor-or-maintenance-suse-observability-release).
+If you don't have that version please upgrade first following the standard [upgrade steps](https://docs.stackstate.com/6.0/self-hosted-setup/upgrade-stackstate/steps-to-upgrade#minor-or-maintenance-stackstate-release).
 
-## Create a backup and download the backup
+## Create a configuration backup and download the backup
 
 First we create a configuration backup of the StackState configuration, after this you shouldn't make any configuration changes anymore in StackState (they will not be transfered to SUSE Observability). To do this first familiarize yourself with the configuration backup and get the required scripts using the [configuration backup docs for StackState 6.x](https://docs.stackstate.com/6.0/self-hosted-setup/data-management/backup_restore/configuration_backup#working-with-configuration-backups).
 
@@ -107,9 +107,9 @@ At some point traffic will need to be switched over from StackState to SUSE Obse
 
 It is also possible to install SUSE Observability under a new URL, in that case you'll need to update the agent and Open Telemetry collectors to use the new URL or use another method of re-routing the traffic.
 
-Below we summarize the before and after situation in one picture.
-
-TODO: Image
+To summarize, before the migration the setup is StackState running in namespace `stackstate` with URL `stackstate.demo.stackstate.io`. This will get migrated to:
+* SUSE Observability in namespace `suse-observability` with URL `stackstate.demo.stackstate.io`, this will be the new active instance
+* StackState in namespace `stackstate` with URL `stackstate-old.demo.stackstate.io`, this will only have historic data
 
 ### Install SUSE Observability
 
@@ -203,6 +203,48 @@ Re-routing the traffic will switch both agent traffic and users of StackState to
    ```
 
 Now users can go to `https://stackstate.demo.stackstate.io` to get SUSE Observability with all the familiar StackState features and live data. They can go to `https://stackstate-old.demo.stackstate.io` to review historical data.
+
+### Scale down StackState
+
+To make sure nothing changes anymore in the old "StackState" setup and also to reduce its resource usage a number of StackState deployments must be scaled down to 0 replicas. The best way to do this is via the Helm values, in that way any other configuration change will not accidentally scale up some of the deployments again.
+
+Create a new `scaled-down.yaml` file (or edit your existing `values.yaml` for StackState to include or update these keys):
+
+```yaml
+anomaly-detection:
+  enabled: false
+backup:
+  enabled: false
+stackstate:
+  components:
+    correlate:
+      replicaCount: 0
+    checks:
+      replicaCount: 0
+    healthSync:
+      replicaCount: 0
+    e2es:
+      replicaCount: 0
+    notification:
+      replicaCount: 0
+    receiver:
+      replicaCount: 0
+    state:
+      replicaCount: 0
+    sync:
+      replicaCount: 0
+    slicing:
+      replicaCount: 0
+    vmagent:
+      replicaCount: 0
+  experimental:
+    server:
+      split: true
+opentelemetry:
+  enabled: false
+```
+
+[Now run the `helm upgrade` command](https://docs.stackstate.com/6.0/self-hosted-setup/install-stackstate/kubernetes_openshift/kubernetes_install#deploy-stackstate-with-helm) and include the extra `scaled-down.yaml` as a values file with `--values scaled-down.yaml`.
 
 ### Uninstall StackState
 
