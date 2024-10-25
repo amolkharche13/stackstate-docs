@@ -1,22 +1,19 @@
 ---
 description: SUSE Observability Self-hosted
 ---
-TODO: Split docs for simple case (uninstall StackState) and run side-by-side
 
 # Migrating from StackState 6.x to SUSE Observability
 
 Due to the rename of the product and also due to breaking changes in the topology data format it is not possible to simply upgrade from StackState to SUSE Observability. This migration guide will help you set up SUSE Observability exactly the same as StackState.
 
-SUSE Observability will be a new installation, without the already existing historical data. **Optionally** the historical data can be kept accessible until SUSE Observability has built up sufficient history. This guide describes how that can be done using the StackState installation in a slimmed down form, i.e. it uses less resourcves. Note that SUSE Observability will ingest new data and it is responsible to run monitors and send out notifications. StackState will only offer access to the historical data.
+SUSE Observability will be a new installation, without the already existing historical data. **Optionally** the historical data can be kept accessible until SUSE Observability has built up sufficient history. This guide describes both scenarios separately. 
 
-The steps to migrate are, see the next sections for a step-by-step guide:
+Depending on the chosen scenario the steps to migrate are different. Running side-by-side is slightly more complicated and will require more resources. The overall steps, applicable to both scenarios are:
 1. Make sure the latest version of StackState 6.x is installed
 2. Create and download a configuration backup
-3. Install SUSE Observability
-4. Upload and restore the configuration backup
-5. Re-route the traffic
-6. Migrate the agent and Open Telemetry collectors
-7. Scale down or uninstall StackState
+3. Install and configure SUSE Observability, scenario specific steps
+4. Update Open Telemetry collectors configuration
+5. Migrate the agent
 
 {% hint style="info" %}
 Throughout this guide all examples assume the following setup, customize the commands to match your exact setup:
@@ -24,14 +21,6 @@ Throughout this guide all examples assume the following setup, customize the com
 * StackState is installed in the `stackstate` namespace
 * SUSE Observability will be installed in the `suse-observability` namespace
 {% endhint %}
-
-At some point traffic will need to be switched over from StackState to SUSE Observability. The solution that limits the impact on your users and the installed agents is to configure SUSE Observability with the URL originally used by StackState. This is easy when you uninstall StackState before installing SUSE Observability, but it requires some extra steps when you want to keep StackState active. This guide will describe the case where the same URL is used with StackState optionally still accessible under a new `stackstate-old` URL.
-
-It is also possible to install SUSE Observability under a new URL, in that case you'll need to update the agent and Open Telemetry collectors to use the new URL or use another method of re-routing the traffic. Be aware that, when using a new URL, this may also impact some other settings, for example when using an ODIC provider for authentication URLs need to be updated both in the provider and in the SUSE Observability configuration values.
-
-Below we summarize the before and after situation in one picture.
-
-TODO: Image
 
 ## Install latest version of StackState 6.x
 
@@ -64,17 +53,28 @@ From the `restore` directory that contains the scripts run these commands:
 
 You should now have the configuration backup file on your computer.
 
-## Install SUSE Observability
+## Install and configure SUSE Observability
 
-Before installing SUSE Observability it is possible to already uninstall StackState to free up cluster resources. However, this will mean neither StackState nor SUSE Observability is monitoring your clusters and applications until you finish the guide. Uninstalling StackState will also remove your historical data (topology and all other telemetry data too). To uninstall StackState follow the [uninstallation docs](https://docs.stackstate.com/6.0/self-hosted-setup/uninstall).
+This is where the 2 options are different. Follow the instructions for one of the two.
+
+{% tabs %}
+{% tab title="Replace StackState" %}
+
+### Uninstall StackState
+
+Uninstalling StackState before installing SUSE Observability has 2 advantages, first of all it frees up resources in the cluster, so no temporary extra nodes are needed. Second, it removes the ingress configuration for StackState freeing up the StackState URL to be re-used by SUSE Observability. The only disadvantage is there will be a period from this point until setting up the configuration of SUSE Observability where you won't have monitoring available with StackState nor SUSE Observability. 
+
+Uninstalling StackState will also remove your historical data (topology and all other telemetry data too). To uninstall StackState follow the [uninstallation docs](https://docs.stackstate.com/6.0/self-hosted-setup/uninstall).
+
+### Install SUSE Observability
 
 Install SUSE Observability in a different namespace from StackState to avoid any conflicts. Recommended is to use the same namespace as in the documentation, `suse-observability`. 
 
-The biggest change for installation is that there is now support for profiles, please select the profile that matches your observed cluster using the [requirements](../install-stackstate/requirements.md#resource-requirements) and use it to generate the values as documented in the installation guide. Customized Helm values for StackState are compatible with SUSE Observability. However, the values to customize resources must be removed in favor of the new profiles. If you did not uninstall StackState also exclude the ingress setup from the SUSE Observability installation for now.
+The biggest change for installation is that there is now support for profiles, please select the profile that matches your observed cluster using the [requirements](../install-stackstate/requirements.md#resource-requirements) and use it to generate the values as documented in the installation guide. Customized Helm values for StackState are compatible with SUSE Observability. However, the values to customize resources must be removed in favor of the new profiles. You can use the same ingress settings, such that SUSE Observability effectively will replace StackState from a user and agent perspective.
 
-To install SUSE Observability follow the [installation guide](../install-stackstate/kubernetes_openshift/kubernetes_install.md), use the selected profile and your (updated) custom values. In case you decided to install SUSE Observability with a new URL also follow the instructions to configure the [ingress](../install-stackstate/kubernetes_openshift/ingress.md).
+To install SUSE Observability follow the [installation guide](../install-stackstate/kubernetes_openshift/kubernetes_install.md), use the selected profile and your (updated) custom values. 
 
-## Restore the configuration backup
+### Restore the configuration backup
 
 Now that SUSE Observability is installed the configuration backup can be restored. The SUSE Observability Helm chart comes with a similar set of backup tools [documented here](../data-management/backup_restore/configuration_backup.md). **These are not the same as for StackState 6.x**, so make sure to get the scripts from the `restore` directory of the **SUSE Observability Helm chart** for restoring the backup.
 
@@ -99,7 +99,52 @@ From the `restore` directory of the SUSE Observability Helm chart run these comm
 
 Now SUSE Observability has the exact same setup as StackState and we're ready to start using it.
 
-## Re-route traffic
+{% endtab %}
+{% tab title="Run side-by-side" %}
+In this scenario SUSE Observability will ingest new data and it is responsible to run monitors and send out notifications. StackState will only offer access to the historical data.
+
+At some point traffic will need to be switched over from StackState to SUSE Observability. The solution that limits the impact on your users and the installed agents is to configure SUSE Observability with the URL originally used by StackState. This guide will re-use the StackState URL (`stackstate.demo.stackstate.io`) while the "old" StackState will be accessible under a new `stackstate-old.demo.stackstate.io` URL. When using an OIDC provider for authentication the `stackstate-old` URL will need to be add/updated in the OIDC provider configuration and in the StackState configuration.
+
+It is also possible to install SUSE Observability under a new URL, in that case you'll need to update the agent and Open Telemetry collectors to use the new URL or use another method of re-routing the traffic.
+
+Below we summarize the before and after situation in one picture.
+
+TODO: Image
+
+### Install SUSE Observability
+
+Install SUSE Observability in a different namespace from StackState to avoid any conflicts. Recommended is to use the same namespace as in the documentation, `suse-observability`. 
+
+The biggest change for installation is that there is now support for profiles, please select the profile that matches your observed cluster using the [requirements](../install-stackstate/requirements.md#resource-requirements) and use it to generate the values as documented in the installation guide. Customized Helm values for StackState are compatible with SUSE Observability. However, the values to customize resources must be removed in favor of the new profiles. Also exclude the ingress setup from the SUSE Observability installation for now.
+
+To install SUSE Observability follow the [installation guide](../install-stackstate/kubernetes_openshift/kubernetes_install.md), use the selected profile and your (updated) custom values.
+
+### Restore the configuration backup
+
+Now that SUSE Observability is installed the configuration backup can be restored. The SUSE Observability Helm chart comes with a similar set of backup tools [documented here](../data-management/backup_restore/configuration_backup.md). **These are not the same as for StackState 6.x**, so make sure to get the scripts from the `restore` directory of the **SUSE Observability Helm chart** for restoring the backup.
+
+From the `restore` directory of the SUSE Observability Helm chart run these commands to restore the backup:
+1. Set the active context and namespace:
+  ```bash
+  kubectl config use-context observability
+  kubectl config set-context --current --namespace=suse-observability
+  ```
+2. Upload the backup file previously created, in this case `sts-backup-20241024-1423.sty` (make sure to use the full path if needed):
+   ```bash
+   ./upload-configuration-backup.sh sts-backup-20241024-1423.sty
+   ```
+3. Create a backup (this will require 1Gi of memory and 1 core in the cluster), this may take a while to create a Kubernetes job and start the pod:
+  ```bash
+    ./restore-configuration-backup.sh sts-backup-20241024-1423.sty
+  ```
+4. Scale all deployments back up:
+   ```bash
+   ./scale-up.sh
+   ```
+
+Now SUSE Observability has the exact same setup as StackState and we're ready to start using it.
+
+### Re-route traffic
 
 Re-routing the traffic will switch both agent traffic and users of StackState to SUSE Observability. To do this 2 steps are needed, first switch StackState to a new URL, then configure the SUSE Observability ingress to use the original StackState URL. In between these steps SUSE Observability/StackState will temporarily be inaccessible, but the agents will cache the data and send it when they can connect again.
 
@@ -159,10 +204,53 @@ Re-routing the traffic will switch both agent traffic and users of StackState to
 
 Now users can go to `https://stackstate.demo.stackstate.io` to get SUSE Observability with all the familiar StackState features and live data. They can go to `https://stackstate-old.demo.stackstate.io` to review historical data.
 
-## Migrate agents and OpenTelemetry Collector
+### Uninstall StackState
 
-TODO
+When the StackState installation is not needed anymore it can be uninstalled using the [uninstall procedure](https://docs.stackstate.com/6.0/self-hosted-setup/uninstall).
 
-## Uninstall StackState
+{% endtab %}
+{% endtabs %}
 
-When the StackState installation is not needed anymore for historical data it can be uninstalled using the [uninstall procedure](https://docs.stackstate.com/6.0/self-hosted-setup/uninstall).
+## Update Open Telemetry collectors configuration
+
+SUSE Observability has a change in its authentication. StackState used a bearer token with the scheme `StackState`, but SUSE Observability uses the scheme `SUSEObservability`. Update the values for your installed Open Telemetry Collectors to switch from:
+
+```yaml
+config:
+  extensions:
+    bearertokenauth:
+      scheme: StackState
+      token: "${env:API_KEY}"
+```
+
+to 
+```yaml
+config:
+  extensions:
+    bearertokenauth:
+      scheme: SUSEObservability
+      token: "${env:API_KEY}"
+```
+
+Use the updated values to upgrade the installed collectors with the `helm upgrade` command, see also [deploying the Open Telemetry Collector](../otel/collector.md#deploy-the-collector) for more details.
+
+## Migrate agents
+
+The final step in migrating to SUSE Observability is to update all your installed agents. This does not have to be done immediately but can be done at a convenient time for each specific cluster, because SUSE Observability is backward compatible with the StackState agent.
+
+Migrating is an easy 2 step process:
+1. Uninstall the StackState agent
+2. Install the SUSE Observability agent
+
+### Uninstall the StackState agent
+It is important this is done first, because it is not possible to run both agents at the same time. Uninstalling the agent on a cluster, using the default namespace an release name from the agent installation docs, is done like this:
+
+```bash
+helm uninstall -n stackstate stackstate-k8s-agent
+```
+
+In case you used a different namespace or cluster update the command accordingly.
+
+### Install the SUSE Observabilty agent
+
+Navigate to `https://your-stackstate-instance/#/stackpacks/kubernetes-v2`. Find the cluster in the list of StackPack instances and copy and run the helm install command for your Kubernetes distribution on the cluster that you are migrating. If you have custom values you can include them without modification with a `--values` argument, the SUSE Observability agent values use the same naming as the StackState agent.
