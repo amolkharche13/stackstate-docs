@@ -128,7 +128,7 @@ At some point traffic will need to be switched over from StackState to SUSE Obse
 
 It is also possible to install SUSE Observability under a new URL, in that case you'll need to update the agent and Open Telemetry collectors to use the new URL or use another method of re-routing the traffic.
 
-To summarize, before the migration the setup is StackState running in namespace `stackstate` with URL `]ttps://stackstate.demo.stackstate.io`. This will get migrated to:
+To summarize, before the migration the setup is StackState running in namespace `stackstate` with URL `https://stackstate.demo.stackstate.io`. This will get migrated to:
 * SUSE Observability in namespace `suse-observability` with URL `stackstate.demo.stackstate.io`, this will be the new active instance
 * StackState in namespace `stackstate` with URL `https://stackstate-old.demo.stackstate.io`, this will only have historic data
 
@@ -179,7 +179,7 @@ From the `restore` directory of the SUSE Observability Helm chart run these comm
   ```bash
     ./restore-configuration-backup.sh sts-backup-20241024-1423.sty
   ```
-  Make sure to answer `yes` to confirm removing all data is ok.
+  Double check that you are in the suse-observability namespace and not anymore in the StackState namespace, only then answer `yes` to confirm removing all data is ok.
 4. Scale all deployments back up:
    ```bash
    ./scale-up.sh
@@ -187,72 +187,12 @@ From the `restore` directory of the SUSE Observability Helm chart run these comm
 
 Now SUSE Observability has the exact same setup as StackState and we're ready to start using it.
 
-### Re-route traffic
 
-Re-routing the traffic will switch both agent traffic and users of StackState to SUSE Observability. To do this 2 steps are needed, first switch StackState to a new URL, then configure the SUSE Observability ingress to use the original StackState URL. In between these steps SUSE Observability/StackState will temporarily be inaccessible, but the agents will cache the data and send it when they can connect again.
-
-1. Take the ingress configuration from StackState and copy it into the values you have for SUSE Observability, or make a copy into a separate `ingress.yaml` values file, next to the generated `baseConfig_values.yaml` and `sizing_values.yaml`. 
-2. Update the ingress values for StackState to use a different URL, here we changed it from `stackstate` to `stackstate-old`: 
-   ```yaml
-    ingress:
-      annotations:
-        nginx.ingress.kubernetes.io/proxy-body-size: 100m
-      enabled: true
-      hosts:
-        - host: "stackstate-old.demo.stackstate.io"
-      tls:
-        - hosts:
-            - "stackstate-old.demo.stackstate.io"
-          secretName: tls-secret-stackstate-old
-
-    opentelemetry-collector:
-      ingress:
-        enabled: true
-        annotations:
-          nginx.ingress.kubernetes.io/proxy-body-size: "50m"
-          nginx.ingress.kubernetes.io/backend-protocol: GRPC
-        hosts:
-          - host: otlp-stackstate-old.demo.stackstate.io
-            paths:
-              - path: /
-                pathType: Prefix
-                port: 4317
-        tls:
-          - hosts:
-              - otlp-stackstate-old.demo.stackstate.io
-            secretName: tls-secret-stackstate-old-otlp
-    ```
-3. Edit the original `values.yaml` of StackState and update the `stackstate.baseUrl` value to also use the new URL (in this case `https://stackstate-old.demo.stackstate.io`).
-4. Run the helm upgrade for StackState, so it starts using the `stackstate-old.demo.stackstate.io` ingress (make sure to include all values files used during installation of StackState with the updated ingress):
-  ```
-  helm upgrade \
-      --install \
-      --namespace stackstate \
-      --values stackstate-values/values.yaml \
-      --values stackstate-values/stackstate-ingress.yaml \
-    stackstate \
-    stackstate/stackstate-k8s
-  ```
-5. Run the [helm upgrade](../install-stackstate/kubernetes_openshift/kubernetes_install.md#deploy-suse-observability-with-helm) for SUSE Observability, to start using the original `stackstate.demo.stackstate.io` URL (make sure to include all values files used during installation of SUSE Observability + the `ingress.yaml`):
-   ```
-    export VALUES_DIR=.
-    helm upgrade \
-      --install \
-      --namespace suse-observability \
-      --values $VALUES_DIR/suse-observability-values/templates/baseConfig_values.yaml \
-      --values $VALUES_DIR/suse-observability-values/templates/sizing_values.yaml \  
-      --values ingress.yaml \
-    suse-observability \
-    suse-observability/suse-observability
-   ```
-
-Now users can go to `https://stackstate.demo.stackstate.io` to get SUSE Observability with all the familiar StackState features and live data. They can go to `https://stackstate-old.demo.stackstate.io` to review historical data.
-
-### Scale down StackState
+### Prepare to scale down StackState
 
 To make sure nothing changes anymore in the old "StackState" setup and also to reduce its resource usage a number of StackState deployments must be scaled down to 0 replicas. The best way to do this is via the Helm values, in that way any other configuration change will not accidentally scale up some of the deployments again.
 
-Create a new `scaled-down.yaml` file (or edit your existing `values.yaml` for StackState to include or update these keys):
+Create a new `scaled-down.yaml` file and store it next to your StackState `values.yaml` (or edit your existing `values.yaml` for StackState to include or update these keys):
 
 ```yaml
 common:
@@ -293,17 +233,71 @@ opentelemetry:
   enabled: false
 ```
 
-[Now run the `helm upgrade` command](https://docs.stackstate.com/6.0/self-hosted-setup/install-stackstate/kubernetes_openshift/kubernetes_install#deploy-stackstate-with-helm) and include the extra `scaled-down.yaml` as a values file with `--values scaled-down.yaml`:
-```
-helm upgrade \
-    --install \
-    --namespace stackstate \
-    --values stackstate-values/values.yaml \
-    --values stackstate-values/stackstate-ingress.yaml \
-    --values stackstate-values/scaled-down.yaml \
-  stackstate \
-  stackstate/stackstate-k8s
-```
+This file will be used when changing the ingress for StackState. When no agent or open telemetry data is received anymore these StackState services are not needed.
+
+### Re-route traffic
+
+Re-routing the traffic will switch both agent traffic and users of StackState to SUSE Observability. To do this 2 steps are needed, first switch StackState to a new URL, then configure the SUSE Observability ingress to use the original StackState URL. In between these steps SUSE Observability/StackState will temporarily be inaccessible, but the agents will cache the data and send it when they can connect again.
+
+1. Take the ingress configuration from StackState and copy it into the values you have for SUSE Observability, or make a copy into a separate `ingress.yaml` values file, next to the generated `baseConfig_values.yaml` and `sizing_values.yaml`. 
+2. Update the ingress values for StackState to use a different URL, here we change it from `stackstate` to `stackstate-old`: 
+   ```yaml
+    ingress:
+      annotations:
+        nginx.ingress.kubernetes.io/proxy-body-size: 100m
+      enabled: true
+      hosts:
+        - host: "stackstate-old.demo.stackstate.io"
+      tls:
+        - hosts:
+            - "stackstate-old.demo.stackstate.io"
+          secretName: tls-secret-stackstate-old
+
+    opentelemetry-collector:
+      ingress:
+        enabled: true
+        annotations:
+          nginx.ingress.kubernetes.io/proxy-body-size: "50m"
+          nginx.ingress.kubernetes.io/backend-protocol: GRPC
+        hosts:
+          - host: otlp-stackstate-old.demo.stackstate.io
+            paths:
+              - path: /
+                pathType: Prefix
+                port: 4317
+        tls:
+          - hosts:
+              - otlp-stackstate-old.demo.stackstate.io
+            secretName: tls-secret-stackstate-old-otlp
+    ```
+3. Edit the original `values.yaml` of StackState and update the `stackstate.baseUrl` value to also use the new URL (in this case `https://stackstate-old.demo.stackstate.io`).
+4. Run the helm upgrade for StackState, and include the updated ingress configuration so it starts using the `stackstate-old.demo.stackstate.io` ingress. Also include the `scaled-down.yaml` values from the previous step and make sure to include all values files used during installation of StackState:
+  ```
+  helm upgrade \
+      --install \
+      --namespace stackstate \
+      --values stackstate-values/values.yaml \
+      --values stackstate-values/stackstate-ingress.yaml \
+      --values stackstate-values/scaled-down.yaml \
+    stackstate \
+    stackstate/stackstate-k8s
+  ```
+5. Run the [helm upgrade](../install-stackstate/kubernetes_openshift/kubernetes_install.md#deploy-suse-observability-with-helm) for SUSE Observability, to start using the original `stackstate.demo.stackstate.io` URL (make sure to include all values files used during installation of SUSE Observability but now also include the `ingress.yaml`):
+   ```
+    export VALUES_DIR=.
+    helm upgrade \
+      --install \
+      --namespace suse-observability \
+      --values $VALUES_DIR/suse-observability-values/templates/baseConfig_values.yaml \
+      --values $VALUES_DIR/suse-observability-values/templates/sizing_values.yaml \  
+      --values ingress.yaml \
+    suse-observability \
+    suse-observability/suse-observability
+   ```
+
+Now users can go to `https://stackstate.demo.stackstate.io` to get SUSE Observability with all the familiar StackState features and live data. The first time users may need to hit refresh to force loading of the new application.
+
+They can go to `https://stackstate-old.demo.stackstate.io` to review historical data.
 
 ### Uninstall StackState
 
