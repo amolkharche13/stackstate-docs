@@ -10,37 +10,21 @@ SUSE Observability imposes data retention limits to save storage space and impro
 
 ## Retention of topology graph data
 
-By default, topology graph data will be retained for 30 days. This works in a way that the latest state of topology graph will always be retained; only history older than 30 days will be removed. You can check and alter the configured retention period this using the SUSE Observability CLI.
+By default, topology graph data will be retained for 30 days. This works in a way that the latest state of topology graph will always be retained; only history older than 30 days will be removed.
+In some cases, it may be useful to keep historical data for more than 30 days or to reduce it to less than 30 days to save on disk space. Topology retention can be configured through the helm chart:
 
-```shell
-$ sts graph retention
+```yaml
+stackstate:
+  topology:
+    # Retention set to 1 week
+    retentionHours: 144
 ```
 
-In some cases, it may be useful to keep historical data for more than 30 days or to reduce it to less than 30 days to save on disk space.
+Note that by adding more time to the data retention period, the amount of data stored is also going to grow and requires more storage space. This may also affect the performance of the Views.
 
-```shell
-$ sts graph retention --set 10d
-```
+When lowering the retention period, it can take some time until disk space is freed up (at least 15 minutes).
 
-\(note that the duration can be specified as a duration string\)
-
-Note that by adding more time to the data retention period, the amount of data stored is also going to grow and need more storage space. This may also affect the performance of the Views.
-
-After changing the retention period to a smaller window, you may end up with some data that's already expired and will wait there until the next scheduled cleanup. To schedule a cleanup soon after the new retention window is applied use this command:
-
-```shell
-$ sts graph retention --set 10d --schedule-removal
-```
-
-In some cases, for example a disk running full, it can be needed to force removal of data immediately. This will have an impact on performance and current activity on SUSE Observability so is better avoided. 
-
-Note that this may take some time to have an effect.
-
-```shell
-$ sts graph delete-expired-data --immediately
-```
-
-## Retention of events, traces and logs
+## Retention of events and logs
 
 ### SUSE Observability data store
 
@@ -48,7 +32,7 @@ If you are using the event/logs store provided with SUSE Observability, your dat
 
 #### Configure disk space for Elasticsearch
 
-In some circumstances it may be necessary to adjust the disk space available to Elasticsearch and how it's allocated to logs, events and traces, for example if you anticipate a lot of data to arrive for a specific data type. 
+In some circumstances it may be necessary to adjust the disk space available to Elasticsearch and how it's allocated to logs and events, for example if you anticipate a lot of data to arrive for a specific data type. 
 
 Here is a snippet with the complete disk space and retention config for Elasticsearch, including the default values.
 
@@ -68,11 +52,6 @@ stackstate:
       esDiskSpaceShare: 30
       # Number of days to keep the events data on Es
       retention: 30
-    trace2es:
-      esDiskSpaceShare: 0
-      # Number of days to keep the traces data on Es
-      retention: 7
-      enabled: false
 ```
 
 The disk space available for Elasticsearch is configured via the `elasticsearch.volumeClaimTemplate.resources.requests.storage` key. To change this value after the initial installation some [extra steps are required](data_retention.md#resizing-storage).
