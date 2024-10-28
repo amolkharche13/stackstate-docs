@@ -14,7 +14,7 @@ The configuration backup is enabled by default. In its default setup it will mak
 
 ## Working with configuration backups
 
-Scripts to work with configuration backups (but also all other backups) can be found in the [restore directory of the StackState Helm chart repository on the stackstate-6.x branch \(github.com\)](https://github.com/StackVista/helm-charts/tree/stackstate-6.x/stable/stackstate-k8s/restore). To use the scripts, download them from GitHub or checkout the repository.
+Scripts to work with configuration backups (but also all other backups) can be downloaded from the [release for the StackState Helm chart](https://github.com/StackVista/helm-charts/releases/tag/stackstate-k8s%2F1.12.0). Download and extract the `backup-scripts-<version>.tar.gz` to get started.
 
 **Before you use the scripts, ensure that** the `kubectl` binary is installed and it is configured with the context and namespace where StackState is installed. For example run this command to connect to the context `stackstate-cluster` and namespace `stackstate`:
 ```
