@@ -14,7 +14,7 @@ The configuration backup is enabled by default. In its default setup it will mak
 
 ## Working with configuration backups
 
-Scripts to work with configuration backups (but also all other backups)  can be found in the [restore directory of the SUSE Observability Helm chart repository \(github.com\)](https://github.com/StackVista/helm-charts/tree/master/stable/suse-observability/restore). To use the scripts, download them from GitHub or checkout the repository.
+Scripts to work with configuration backups (but also all other backups) can be downloaded from the [latest release for the SUSE Observability Helm chart](https://github.com/StackVista/helm-charts/releases/latest). Download and extract the `backup-scripts-<version>.tar.gz` to get started.
 
 **Before you use the scripts, ensure that** the `kubectl` binary is installed and it is configured with the context and namespace where SUSE Observability is installed. For example run this command to connect to the context `observability-cluster` and namespace `suse-observablity`:
 ```
