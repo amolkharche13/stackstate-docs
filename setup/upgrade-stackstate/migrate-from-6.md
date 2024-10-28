@@ -89,11 +89,23 @@ helm template \
   suse-observability/suse-observability-values --output-dir $VALUES_DIR
 ```
 
-The Helm install command is the same as in the installation docs with the option to include the `custom-values-no-resources.yaml` values file if you have any.
+The Helm install command is the same as in the installation docs with the option to include the `custom-values-no-resources.yaml` values file if you have any. Also make sure to include the ingress configuration values, this can be the same one as was used for StackState. In the example we'll use:
+
+```bash
+helm upgrade \
+  --install \
+  --namespace suse-observability \
+  --values $VALUES_DIR/suse-observability-values/templates/baseConfig_values.yaml \
+  --values $VALUES_DIR/suse-observability-values/templates/sizing_values.yaml \
+  --values $VALUES_DIR/suse-observability-values/templates/ingress.yaml \
+suse-observability \
+suse-observability/suse-observability
+```
 
 {% hint style="info" %}
 The installation will by default generate a new admin password. If you are running with the standard authentication and want to keep the same admin password as before you will need to specify it in the value generation step (or edit it after generating the values).
 {% endhint %}
+
 ### Restore the configuration backup
 
 Now that SUSE Observability is installed the configuration backup can be restored. The SUSE Observability Helm chart comes with a similar set of backup tools [documented here](../data-management/backup_restore/configuration_backup.md). **These are not the same as for StackState 6.x**, so make sure to get the scripts from the `restore` directory of the **SUSE Observability Helm chart** for restoring the backup.
@@ -118,7 +130,7 @@ From the `restore` directory of the SUSE Observability Helm chart run these comm
    ./scale-up.sh
    ```
 
-Now SUSE Observability has the exact same setup as StackState and we're ready to start using it.
+Now SUSE Observability has the exact same setup as StackState and we're ready to start using it. Note that, because the same URL is used, a browser refresh may be required the first time.
 
 {% endtab %}
 {% tab title="Run side-by-side" %}
