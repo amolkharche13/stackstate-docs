@@ -51,7 +51,7 @@ To restore a backup:
 
 ### Trigger a manual backup
 
-A backup can be created at any time without any service interruption. The `backup-configuration-now.sh` script in the Github repostiroy can be used to trigger a backup at any time. The backup will follow the standard naming convention, including the date/time of the backup.
+A backup can be created at any time without any service interruption. The `backup-configuration-now.sh` script in the Github repository can be used to trigger a backup at any time. The backup will follow the standard naming convention, including the date/time of the backup.
 
 ### Customizing configuration backups
 
