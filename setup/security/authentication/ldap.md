@@ -49,12 +49,11 @@ stackstate:
         # groupMemberKey: "member:1.2.840.113556.1.4.1941:"
 
     # map the groups from LDAP to the
-    # standard subjects in SUSE Observability (guest, powerUser, admin and platformAdmin)
+    # standard subjects in SUSE Observability (guest, powerUser and admin)
     roles:
       guest: ["ldap-guest-role-for-stackstate"]
       powerUser: ["ldap-power-user-role-for-stackstate"]
       admin: ["ldap-admin-role-for-stackstate"]
-      platformAdmin: ["ldap-platform-admin-role-for-stackstate"]
 ```
 {% endtab %}
 {% endtabs %}
