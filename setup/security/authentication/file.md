@@ -27,9 +27,6 @@ stackstate:
         - username: admin
           passwordHash: 5f4dcc3b5aa765d61d8327deb882cf99
           roles: [ stackstate-admin ]
-        - username: platformadmin
-          passwordHash: 5f4dcc3b5aa765d61d8327deb882cf99
-          roles: [ stackstate-platform-admin ]
         - username: guest
           passwordHash: 5f4dcc3b5aa765d61d8327deb882cf99
           roles: [ stackstate-guest ]
@@ -48,7 +45,7 @@ Follow the steps below to configure users and apply changes:
 1. In `authentication.yaml` - add users. The following configuration should be added for each user \(see the example above\):
    * **username** - the username used to log into SUSE Observability.
    * **passwordHash** - the password used to log into SUSE Observability. Passwords are stored as a bcrypt hash.
-   * **roles** - the list of roles that the user is a member of. The [default SUSE Observability roles](../rbac/rbac_permissions.md#predefined-roles) are `stackstate-admin`,`stackstate-platform-admin`, `stackstate-power-user` and `stackstate-guest`, for details on how to create other roles, see [RBAC roles](../rbac/rbac_roles.md).
+   * **roles** - the list of roles that the user is a member of. The [default SUSE Observability roles](../rbac/rbac_permissions.md#predefined-roles) are `stackstate-admin`, `stackstate-power-user` and `stackstate-guest`, for details on how to create other roles, see [RBAC roles](../rbac/rbac_roles.md).
 2. Store the file `authentication.yaml` together with the file `values.yaml` from the SUSE Observability installation instructions.
 3. Run a Helm upgrade to apply the changes:
 
@@ -77,7 +74,7 @@ Follow the steps below to configure users and apply changes:
 1. In `authentication.yaml` - add users. The following configuration should be added for each user \(see the example above\):
    * **username** - the username used to log into SUSE Observability.
    * **password** - the password used to log into SUSE Observability. Passwords are stored as either an MD5 hash or a bcrypt hash.
-   * **roles** - the list of roles that the user is a member of. The [default SUSE Observability roles](../rbac/rbac_permissions.md#predefined-roles) are `stackstate-admin`, `stackstate-platform-admin`, `stackstate-power-user`, `stackstate-k8s-troubleshooter` and `stackstate-guest`, for details on how to create other roles, see [RBAC roles](../rbac/rbac_roles.md).
+   * **roles** - the list of roles that the user is a member of. The [default SUSE Observability roles](../rbac/rbac_permissions.md#predefined-roles) are `stackstate-admin`, `stackstate-power-user`, `stackstate-k8s-troubleshooter` and `stackstate-guest`, for details on how to create other roles, see [RBAC roles](../rbac/rbac_roles.md).
 2. Restart SUSE Observability to apply the changes.
 
 {% hint style="info" %}
