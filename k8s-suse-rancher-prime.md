@@ -233,7 +233,5 @@ To enable Single sign-on with your own authentication provider please [see here]
    * This information should be deleted when the UI extensions are uninstalled.
 1. After the extensions are installed, the SUSE Observability UI opens in the same tab as the Rancher UI.
    * You can use shift-click to open in a new tab, this will become the default behaviour
-1. The SUSE Observability Extension is only supported on 2.8.x versions and not yet on the 2.9.x version.
-   * Support for 2.9.x will be available soon.
 1. Be aware upgrading or downgrading from HA to NON-HA and visa-versa is not yet supported.
 
