@@ -136,7 +136,7 @@ helm upgrade \
   --namespace suse-observability \
   --values local-docker-registry.yaml \
   --values $VALUES_DIR/suse-observability-values/templates/baseConfig_values.yaml \
-  --values $VALUES_DIR/suse-observability-values/templates/sizing_values.yaml \  
+  --values $VALUES_DIR/suse-observability-values/templates/sizing_values.yaml \
 suse-observability \
 suse-observability/suse-observability
 ```
