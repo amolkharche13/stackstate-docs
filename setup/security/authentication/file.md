@@ -84,9 +84,44 @@ Follow the steps below to configure users and apply changes:
 * A bcrypt password hash can be generated using the following command line `htpasswd -bnBC 10 "" <password> | tr -d ':\n'` or using an online tool.
 {% endhint %}
 
+### Using an external secret
+
+When the user passwords should come from an external secret, follow [these steps](/setup/security/external-secrets.md#getting-authentication-data-from-an-external-secret) but fill in the following data:
+
+```yaml
+kind: Secret
+metadata:
+   name: "<custom-secret-name>"
+type: Opaque
+data:
+  file_<user1_with_non_alphanum_replaced_by_underscore>_password: <base64 of bcrypt of password>
+  file_<user2_with_non_alphanum_replaced_by_underscore>_password: <base64 of bcrypt of password> 
+```
+
+For every user in the logins section, a record should be added to the secret, where non alphanumeric passwords get replaced by an underscore. For example:
+
+```yaml
+
+stackstate:
+  authentication:
+    file:
+      logins:
+        - username: admin@mycompany.com
+          roles: [ stackstate-admin ]
+
+
+kind: Secret
+metadata:
+   name: "<custom-secret-name>"
+type: Opaque
+data:
+   file_admin_mycompany_com_password: "base64EncryptedPass"
+```
+
 ## See also
 
 * [Authentication options](authentication_options.md)
 * [Permissions for predefined SUSE Observability roles](../rbac/rbac_permissions.md#predefined-roles)
 * [Create RBAC roles](../rbac/rbac_roles.md)
+* [External Secrets](/setup/security/external-secrets.md#getting-authentication-data-from-an-external-secret)
 

@@ -121,9 +121,22 @@ suse-observability/suse-observability
 * The authentication configuration is stored as a Kubernetes secret.
 {% endhint %}
 
+### Using an external secret
+
+When the ldap password should come from an external secret, follow [these steps](/setup/security/external-secrets.md#getting-authentication-data-from-an-external-secret) but fill in the following data:
+
+```yaml
+kind: Secret
+metadata:
+   name: "<custom-secret-name>"
+type: Opaque
+data:
+  ldap_password: <base64 of ldap password>
+```
+
 ## See also
 
 * [Authentication options](authentication_options.md)
 * [Permissions for predefined SUSE Observability roles](../rbac/rbac_permissions.md#predefined-roles)
 * [Create RBAC roles](../rbac/rbac_roles.md)
-
+* [External Secrets](/setup/security/external-secrets.md#getting-authentication-data-from-an-external-secret)

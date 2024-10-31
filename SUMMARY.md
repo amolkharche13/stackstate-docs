@@ -154,6 +154,7 @@
     * [Roles](setup/security/rbac/rbac_roles.md)
     * [Scopes](setup/security/rbac/rbac_scopes.md)
   * [Self-signed certificates](setup/security/self-signed-certificates.md)
+  * [External secrets](setup/security/external-secrets.md)
 
 
 ## 🔐 Security
