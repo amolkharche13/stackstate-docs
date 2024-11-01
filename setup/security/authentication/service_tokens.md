@@ -146,7 +146,7 @@ A service token can be used for authentication with the `sts` CLI. For details, 
 
 ### SUSE Observability APIs
 
-To use a service token to talk directly to the SUSE Observability Base API or the SUSE Observability Admin API, add it to the header of the request in one of the following ways:
+To use a service token to talk directly to the SUSE Observability Base API, add it to the header of the request in one of the following ways:
 
 * In the `Authorization` header:
     ```bash

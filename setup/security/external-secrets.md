@@ -61,9 +61,7 @@ data:
    default_password: <base64 of bcrypted password>
 ```
 
-A bcrypt password hash can be generated using the following command line `htpasswd -bnBC 10 "" <password> | tr -d ':\n'` or using an online tool.
-
-Depending on the authentication method chosen, the `default_password` field gets replaced with different data. See the [authentication options](/setup/security/authentication/authentication_options.md) for more info.
+Depending on the authentication method chosen, the `default_password` field gets replaced with different data. See the [authentication options](/setup/security/authentication/authentication_options.md) for more info. In this example the [Single password](/setup/security/authentication/single_password.md) setup is used.
 
 Add the following to your helm install command to use the secret:
 

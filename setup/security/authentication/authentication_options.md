@@ -4,10 +4,11 @@ description: SUSE Observability Self-hosted
 
 # Authentication options
 
-Out of the box, SUSE Observability is configured with [file-based authentication](file.md) with a username and password [configured during installation](../../../setup/install-stackstate/initial_run_guide.md#default-username-and-password). This authenticates users with a file on the server. However, this isn't a production-ready setup.
+Out of the box, SUSE Observability is configured with [single password authentication](file.md) with admin user and random password [configured during installation](../../../setup/install-stackstate/initial_run_guide.md#default-username-and-password). This authenticates users with a simple secret on the server. However, this isn't a production-ready setup.
 
 For better security SUSE Observability can be configured to use exactly one of the following authentication mechanisms \(replacing the standard admin user\):
 
+* [Single password](single_password.md)
 * [File based](file.md)
 * [LDAP](ldap.md)
 * [Open ID Connect \(OIDC\)](oidc.md)
