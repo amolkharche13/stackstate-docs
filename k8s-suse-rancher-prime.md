@@ -156,7 +156,7 @@ The actual values contain the `bcrypt` hashes of those passwords so that they're
 {% endhint %}
 
 {% hint style="warn" %}
-Using a single default password is gerat to get started with SUSE Observability, but for a production setup [more secure authentication options](/setup/security/authentication/authentication_options.md) are available.
+Using a single default password is great to get started with SUSE Observability, but for a production setup [more secure authentication options](/setup/security/authentication/authentication_options.md) are available.
 {% endhint %}
 
 {% hint style="info" %}
