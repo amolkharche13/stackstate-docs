@@ -43,7 +43,7 @@ stackstate:
 Follow the steps below to configure users and apply changes:
 
 1. In `authentication.yaml` - add users. The following configuration should be added for each user \(see the example above\):
-   * **username** - the username used to log into SUSE Observability.
+   * **username** - the username used to log into SUSE Observability. Only alphanumeric and _ characters are allowed.
    * **passwordHash** - the password used to log into SUSE Observability. Passwords are stored as a bcrypt hash.
    * **roles** - the list of roles that the user is a member of. The [default SUSE Observability roles](../rbac/rbac_permissions.md#predefined-roles) are `stackstate-admin`, `stackstate-power-user` and `stackstate-guest`, for details on how to create other roles, see [RBAC roles](../rbac/rbac_roles.md).
 2. Store the file `authentication.yaml` together with the file `values.yaml` from the SUSE Observability installation instructions.
@@ -72,7 +72,7 @@ Follow the steps below to configure users and apply changes:
 Follow the steps below to configure users and apply changes:
 
 1. In `authentication.yaml` - add users. The following configuration should be added for each user \(see the example above\):
-   * **username** - the username used to log into SUSE Observability.
+   * **username** - the username used to log into SUSE Observability. Only alphanumeric and _ characters are allowed.
    * **password** - the password used to log into SUSE Observability. Passwords are stored as either an MD5 hash or a bcrypt hash.
    * **roles** - the list of roles that the user is a member of. The [default SUSE Observability roles](../rbac/rbac_permissions.md#predefined-roles) are `stackstate-admin`, `stackstate-power-user`, `stackstate-k8s-troubleshooter` and `stackstate-guest`, for details on how to create other roles, see [RBAC roles](../rbac/rbac_roles.md).
 2. Restart SUSE Observability to apply the changes.
@@ -94,11 +94,11 @@ metadata:
    name: "<custom-secret-name>"
 type: Opaque
 data:
-  file_<user1_with_non_alphanum_replaced_by_underscore>_password: <base64 of bcrypt of password>
-  file_<user2_with_non_alphanum_replaced_by_underscore>_password: <base64 of bcrypt of password> 
+  file_<username1>_password: <base64 of bcrypt of password>
+  file_<username2>_password: <base64 of bcrypt of password> 
 ```
 
-For every user in the logins section, a record should be added to the secret, where non alphanumeric passwords get replaced by an underscore. For example:
+For every user in the logins section, a record should be added to the secret, filling in the template. For example:
 
 ```yaml
 
@@ -106,7 +106,7 @@ stackstate:
   authentication:
     file:
       logins:
-        - username: admin@mycompany.com
+        - username: admin_user
           roles: [ stackstate-admin ]
 
 
@@ -115,7 +115,7 @@ metadata:
    name: "<custom-secret-name>"
 type: Opaque
 data:
-   file_admin_mycompany_com_password: "base64EncryptedPass"
+   file_admin_user_password: "base64EncryptedPass"
 ```
 
 ## See also

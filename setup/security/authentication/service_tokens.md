@@ -100,7 +100,7 @@ Follow the steps below to configure SUSE Observability to create a bootstrap ser
 * The authentication configuration is stored as a Kubernetes secret.
 {% endhint %}
 
-#### Setup the bootstrap service token though an external secret
+#### Setup the bootstrap service token from an external secret
 
 When the bootstrap token should come from an external secret, follow [these steps](/setup/security/external-secrets.md#getting-authentication-data-from-an-external-secret) and add the following data:
 
