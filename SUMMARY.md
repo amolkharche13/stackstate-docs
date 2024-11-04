@@ -143,6 +143,7 @@
 * [Security](setup/security/README.md)
   * [Authentication](setup/security/authentication/README.md)
     * [Authentication options](setup/security/authentication/authentication_options.md)
+    * [Single password](/setup/security/authentication/single_password.md)
     * [File-based](setup/security/authentication/file.md)
     * [LDAP](setup/security/authentication/ldap.md)
     * [Open ID Connect \(OIDC\)](setup/security/authentication/oidc.md)
@@ -154,6 +155,7 @@
     * [Roles](setup/security/rbac/rbac_roles.md)
     * [Scopes](setup/security/rbac/rbac_scopes.md)
   * [Self-signed certificates](setup/security/self-signed-certificates.md)
+  * [External secrets](setup/security/external-secrets.md)
 
 
 ## 🔐 Security
