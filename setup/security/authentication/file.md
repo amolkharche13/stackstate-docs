@@ -30,7 +30,7 @@ stackstate:
         - username: guest
           passwordHash: 5f4dcc3b5aa765d61d8327deb882cf99
           roles: [ stackstate-guest ]
-        - username: power-user
+        - username: poweruser
           passwordHash: 5f4dcc3b5aa765d61d8327deb882cf99
           roles: [ stackstate-power-user ]
         - username: troubleshooter
