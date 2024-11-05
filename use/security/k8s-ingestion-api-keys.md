@@ -107,5 +107,5 @@ The following code snippet provides an example configuration:
     otlphttp/stackstate:
       auth:
         authenticator: bearertokenauth
-      endpoint: https://<otlp-stackstate-endpoint>
+      endpoint: https://<otlp-http-stackstate-endpoint>
 ```

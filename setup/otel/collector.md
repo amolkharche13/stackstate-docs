@@ -34,7 +34,7 @@ To install and configure the collector for usage with SUSE Observability we'll u
 ### Configure the collector
 
 Here is the full values file needed, continue reading below the file for an explanation of the different parts. Or skip ahead to the next step, but make sure to replace:
-* `<otlp-stackstate-endpoint>` with the OTLP endpoint of your SUSE Observability. If, for example, you access SUSE Observability on `play.stackstate.com` the OTLP endpoint is `otlp-play.stackstate.com` for GRPC and `otlp-http-play.stackstate.com` for  HTTP traffic. So simply prefixing `otlp-` ot `otlp-http-` to the normal SUSE Observability url will do.
+* `<otlp-stackstate-endpoint>` with the OTLP endpoint of your SUSE Observability. If, for example, you access SUSE Observability on `play.stackstate.com` the OTLP endpoint is `otlp-play.stackstate.com` for GRPC and `otlp-http-play.stackstate.com` for  HTTP traffic. So simply prefixing `otlp-` or `otlp-http-` to the normal SUSE Observability url will do.
 * `<your-cluster-name>` with the cluster name you configured in SUSE Observability. **This must be the same cluster name used when installing the SUSE Observability agent**. Using a differnt cluster name will result in an empty traces perspective for Kubernetes components.
 
 {% hint style="warning" %}
@@ -71,7 +71,7 @@ config:
     otlphttp/stackstate:
        auth:
           authenticator: bearertokenauth
-       endpoint: https://<otlp-stackstate-endpoint>      
+       endpoint: https://<otlp--http-stackstate-endpoint>      
   processors:
     tail_sampling:
       decision_wait: 10s
