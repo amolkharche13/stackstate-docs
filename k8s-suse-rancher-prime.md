@@ -26,12 +26,12 @@ There are different installation options available for SUSE Observability. It is
 The HA production setup can support from 150 up to 500 Nodes (a Node is counted as<= 4 vCPU and <= 16GB Memory) under observation.
 The Non-HA setup can support up to 100 Nodes under observation.
 
-| | trial | 10 non-HA | 20 non-HA | 50 non-HA | 100 non-HA | 150 HA | 250 HA | 500 HA |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| **CPU Requests** | 7,5 | 7,5 | 10,5 | 15 | 25 | 49 | 62 | 86.5 |
-| **CPU Limits** | 16 | 16 | 21,5 | 30,5 | 50 | 103 | 128 | 176 |
-| **Memory Requests** | 22Gi | 22Gi | 28Gi | 32.5Gi | 51Gi | 67Gi | 143Gi | 161.5Gi |
-| **Memory Limits** | 23Gi | 23Gi | 29Gi | 33Gi | 51,5Gi | 131Gi | 147.5Gi | 166Gi |
+| | trial | 10 non-HA | 20 non-HA | 50 non-HA | 100 non-HA | 150 HA  | 250 HA | 500 HA |
+| --- | --- | --- | --- | --- | --- |---------| --- | --- |
+| **CPU Requests** | 7,5 | 7,5 | 10,5 | 15 | 25 | 49      | 62 | 86.5 |
+| **CPU Limits** | 16 | 16 | 21,5 | 30,5 | 50 | 103     | 128 | 176 |
+| **Memory Requests** | 25Gi | 25Gi | 31Gi | 35.5Gi | 54Gi | 70Gi | 146Gi | 164.5Gi |
+| **Memory Limits** | 25.5Gi | 25.5Gi | 31.5Gi | 35.5Gi | 54Gi | 133.5Gi | 150Gi | 168.5Gi |
 
 {% hint style="info" %}
 A trial setup is a 10 non-HA setup configured with a 3 day retention and lower disk space requirements.
