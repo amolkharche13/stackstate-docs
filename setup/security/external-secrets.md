@@ -46,7 +46,7 @@ data:
 Add the following to your helm install command to use the secret:
 
 ```bash
-  --set 'stackstate.email.fromExternalSecret'='<custom-secret-name>'
+  --set 'stackstate.email.server.auth.fromExternalSecret'='<custom-secret-name>'
 ```
 
 ## Getting the api key from an external secret

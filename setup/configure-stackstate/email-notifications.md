@@ -21,8 +21,9 @@ stackstate:
     sender: "<stackstate@example.com>"
     server:
       host: "<smtp.example.com>"
-      username: "<user name>"
-      password: "<user password>"
+      auth:
+        username: "<user name>"
+        password: "<user password>"
 ```
 
 This will use port `587` on the SMTP server and uses the `STARTTLS` command to establish a secure connection. These are all the other options that can be customized:
@@ -30,8 +31,10 @@ This will use port `587` on the SMTP server and uses the `STARTTLS` command to e
 ```yaml
 stackstate:
   email:
-    smtpAuth: true
-    smtpSslEnable: true
+    additionalProperties: 
+      # Add needed Java email properties for your mail server (use string values), defaults are: 
+      "mail.smtp.auth": "true"
+      "mail.smtp.starttls.enable": "true"
     server:
       protocol: smtp
       port: 587
