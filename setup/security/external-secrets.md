@@ -29,6 +29,26 @@ Add the following to your helm install command to use the secret:
   --set 'stackstate.license.fromExternalSecret'='<custom-secret-name>'
 ```
 
+## Getting username and password for email notifications from an external secret
+
+Create a secret in the namespace SUSE Observability is installed in, of the following form, filling in the blanks:
+
+```yaml
+kind: Secret
+metadata:
+   name: "<custom-secret-name>"
+type: Opaque
+data:
+  SMTP_USER_NAME: "<base64 of the smtp username>"
+  SMTP_PASSWORD: "<base64 of the smtp password>"
+```
+
+Add the following to your helm install command to use the secret:
+
+```bash
+  --set 'stackstate.email.fromExternalSecret'='<custom-secret-name>'
+```
+
 ## Getting the api key from an external secret
 
 Create a secret in the namespace SUSE Observability is installed in, of the following form, filling in the blanks:
