@@ -15,7 +15,7 @@ To remove the PVC's either remove them manually with `kubectl delete pvc` or del
 ## Customize storage
 
 You can customize the `storageClass` and `size` settings for different volumes in the Helm chart. These example values files show how to change the storage class or the volume size. These can be merged to change both at the same time.
-For the `size` we provide the sameple for both `HA` and `NonHa` depending on the sizing profile chosen during the installation process.
+For the `size` we provide the sample for both `HA` and `NonHa` depending on the sizing profile chosen during the installation process.
 
 {% tabs %}
 {% tab title="Changing storage class" %}
