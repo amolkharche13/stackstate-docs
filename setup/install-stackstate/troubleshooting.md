@@ -11,7 +11,7 @@ Here is a quick guide for troubleshooting the startup of SUSE Observability:
 1. Check that the install completed successfully and the release is listed:
 
    ```text
-   helm list --namespace stackstate
+   helm list --namespace suse-observability
    ```
 
 2. Check that all pods in the SUSE Observability namespace are running:
