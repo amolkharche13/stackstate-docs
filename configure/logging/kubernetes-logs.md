@@ -1,85 +1,27 @@
----
-description: SUSE Observability Self-hosted v5.1.x
----
+# SUSE Observability logs-collector
 
-# Kubernetes logs
+## Notes
 
-## Overview
+Ensure you have `kubectl` access to the SUSE Observability cluster. If not, download the kubeconfig file and set it using the command: `export KUBECONFIG=$PATH-TO-YOUR/kubeconfig`.
 
-In a Kubernetes setup, SUSE Observability functions are distributed across different pods and logs for each function are stored per pod and container. You can access recent logs using `kubectl`, although for long term storage it's recommended to set up log aggregation.
+## Usage
 
-## Kubernetes pods for logging
+The script needs to be downloaded and run directly on the node, using the `root` user or `sudo`.
 
-SUSE Observability logs are stored per pod and container. The table below shows the pod to access for logs relating to specific SUSE Observability functions. Note that actual pod names will include a number or random string suffix (for example, `stackstate-receiver-5b9d79db86-h2hkz`\) and may also include the release name specified when SUSE Observability was deployed as a prefix.
+### Download and run the script
+* Save the script as: `suse-observability_logs_collector.sh`
 
-{% hint style="info" %}
-Note that logs stored on pods will be regularly removed. For long term access to logs, it's advised that you set up [log aggregation](#log-aggregation) for your Kubernetes cluster.
-{% endhint %}
-
-| SUSE Observability function | Logs on pod                                                                                                                                         |
-| :--- |:----------------------------------------------------------------------------------------------------------------------------------------------------|
-| API \(including topology, charts and settings\) | `stackstate-api`                                                                                                                                    |
-| Data indexing into Elasticsearch | `stackstate-e2es` \(events\) |
-| Data ingestion | `stackstate-receiver`                                                                                                                               |
-| Event handlers | `stackstate-view-health`                                                                                                                            |
-| Monitor | `stackstate-checks`                                                                                                                                |
-| State propagation | `stackstate-state`                                                                                                                                  |
-| Synchronization | `stackstate-sync`                                                                                                                                   |
-| View health state | `stackstate-view-health`                                                                                                                            |
-
-You can access logs on a specific pod using the `kubectl logs` command.
-
-For example:
-
-```sh
-$ kubectl logs stackstate-api-0
-```
-
-## Access recent logs
-
-### Pod or container logs
-
-The most recent logs can be retrieved from Kubernetes using the `kubectl logs` command. Check the [pod that you need to monitor](#kubernetes-pods-for-logging) to retrieve a specific log.
-
-For example:
-
-```sh
-# Snapshot of logs for all containers of <pod-name>
-$ kubectl logs <pod-name> --all-containers=true
-
-# Stream logs for all containers of <pod-name>
-$ kubectl logs -f <pod-name> --all-containers=true
-
-# Snapshot of logs for a specific container of <pod-name>
-$ kubectl logs -c <container-name> <pod-name>
-
-# Snapshot of logs for previous terminated container of <pod-name>
-$ kubectl logs -p -c <container-name> <pod-name>
-```
-
-### Synchronization logs
-
-All synchronization logs can be found in a pod `stackstate-sync-<suffix>`. You can use the synchronization name to locate specific log information in a log snapshot.
-
-For example:
-
-```sh
-# Logs of the synchronization for a specific Kubernetes cluster
-$ kubectl logs stackstate-sync-0 | grep "Kubernetes - \<cluster-name\>"
-
-# Logs of the Agent synchronization
-$ kubectl logs stackstate-sync-0 | grep "Agent"
-```
-
-## Log aggregation
-
-For long term storage of SUSE Observability log data, it's advised that you set up log aggregation on your Kubernetes cluster. This can be done using a third party system for storage such as Elasticsearch, Splunk or Logz.io and a log shipper such as Logstash or Fluentd.
-
-For more details of how this can be done, check:
-
-* Shipping logs with [Fluentd \(fluentd.org\)](https://docs.fluentd.org/container-deployment/kubernetes)
-* A complete overview of setting up [log aggregation into Elasticsearch \(bitnami.com\)](https://docs.bitnami.com/tutorials/integrate-logging-kubernetes-kibana-elasticsearch-fluentd/)
-
-## See also
-
-* [kubectl command reference \(kubernetes.io/docs\)](https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands)
+  Using `wget`:
+    ```bash
+    wget https://raw.githubusercontent.com/StackVista/stackstate-docs/SOME_PUBLIC_URL_TO_DOWNLOAD_SCRIPT/suse-observability_logs_collector.sh
+    ```
+  Using `curl`:
+    ```bash
+    curl -OLs https://raw.githubusercontent.com/StackVista/stackstate-docs/SOME_PUBLIC_URL_TO_DOWNLOAD_SCRIPT/suse-observability_logs_collector.sh
+    ```
+ 
+* Run the script using the following commands:
+  ```bash
+  bash suse-observability_logs_collector.sh
+  ```
+  
