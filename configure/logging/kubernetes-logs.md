@@ -78,7 +78,6 @@ For long term storage of SUSE Observability log data, it's advised that you set 
 For more details of how this can be done, check:
 
 * Shipping logs with [Fluentd \(fluentd.org\)](https://docs.fluentd.org/container-deployment/kubernetes)
-* A complete overview of setting up [log aggregation into Elasticsearch \(bitnami.com\)](https://docs.bitnami.com/tutorials/integrate-logging-kubernetes-kibana-elasticsearch-fluentd/)
 
 ## See also
 
