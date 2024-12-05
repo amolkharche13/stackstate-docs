@@ -16,7 +16,7 @@ For support please file a support case in [SUSE Customer Center (SCC)](https://s
 ## Prerequisites
 
 ### License key
-A license key for SUSE Observability server can be obtained via the SUSE Customer Center and will be shown as "SUSE Rancher Prime - Observability Tech Preview" Registration Code. This license is valid until Oct, 31 2024. Before the end a license will be made available which is valid until the end of your Rancher Prime subscription.
+A license key for SUSE Observability server can be obtained via the SUSE Customer Center in the Subscription tab and will be shown as "SUSE Observability" Registration Code. This license is valid until the end of your Rancher Prime subscription.
 
 ### Requirements
 To install SUSE Observability, ensure that the nodes have enough CPU and memory capacity. Below are the specific requirements.
