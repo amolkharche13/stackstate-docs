@@ -63,15 +63,18 @@ collect_yaml_configs() {
 collect_pod_logs() {
     techo "Collecting pod logs..."
     PODS=$(kubectl -n "$NAMESPACE" get pods -o jsonpath="{.items[*].metadata.name}")
-    for pod in $PODS; do
+    for pod in $PODS; do (
         mkdir -p "$OUTPUT_DIR/pods/$pod"
         CONTAINERS=$(kubectl -n "$NAMESPACE" get pod "$pod" -o jsonpath="{.spec.containers[*].name}")
         for container in $CONTAINERS; do
             kubectl -n "$NAMESPACE" logs "$pod" -c "$container" > "$OUTPUT_DIR/pods/$pod/${container}.log" 2>&1
             kubectl -n "$NAMESPACE" logs "$pod" -c "$container" --previous > "$OUTPUT_DIR/pods/$pod/${container}_previous.log" 2>/dev/null
         done
+        ) &
     done
- }
+    wait
+}
+
 
 # Collect general pod statuses
 techo "Collecting pod statuses..."
