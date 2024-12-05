@@ -1,11 +1,15 @@
-# SUSE Observability logs-collector
+# SUSE Observability logs
+
+## Overview
+This page provides tools and guidance for collecting logs from a SUSE Observability cluster. These logs are essential for diagnosing issues, identifying root causes, and troubleshooting problems in clusters that may not be functioning as expected.
+If you're experiencing unexpected behavior, degraded performance, or a failure in your SUSE Observability cluster, this page will help you gather the necessary data to understand what went wrong and take corrective action.
 
 ## Notes
 
-Ensure you have `kubectl` access to the SUSE Observability cluster. If not, download the kubeconfig file and set it using the command: `export KUBECONFIG=$PATH-TO-YOUR/kubeconfig`.
+The script should be executed from a host that has kubectl configured with access to the SUSE Observability cluster or from any other host with the necessary permissions and connectivity to the cluster. 
+This can be done directly on the node using the root user or via sudo.  If kubeconfig is not set, use the command `export KUBECONFIG=$PATH-TO-YOUR/kubeconfig`.
 
 ## Usage
-
 The script needs to be downloaded and run directly on the node, using the `root` user or `sudo`.
 
 ### Download and run the script
@@ -13,11 +17,11 @@ The script needs to be downloaded and run directly on the node, using the `root`
 
   Using `wget`:
     ```bash
-    wget https://raw.githubusercontent.com/StackVista/stackstate-docs/SOME_PUBLIC_URL_TO_DOWNLOAD_SCRIPT/suse-observability_logs_collector.sh
+    wget https://raw.githubusercontent.com/StackVista/stackstate-docs/refs/heads/suse-observability/scripts/suse-observability_logs_collector.sh
     ```
   Using `curl`:
     ```bash
-    curl -OLs https://raw.githubusercontent.com/StackVista/stackstate-docs/SOME_PUBLIC_URL_TO_DOWNLOAD_SCRIPT/suse-observability_logs_collector.sh
+    curl -OLs https://raw.githubusercontent.com/StackVista/stackstate-docs/refs/heads/suse-observability/scripts/suse-observability_logs_collector.sh
     ```
  
 * Run the script using the following commands:
