@@ -1,3 +1,7 @@
+---
+description: SUSE Observability Self-hosted v5.1.x
+---
+
 # SUSE Observability logs
 
 ## Overview
@@ -28,4 +32,4 @@ The script needs to be downloaded and run directly on the node, using the `root`
   ```bash
   bash suse-observability_logs_collector.sh
   ```
-  
+This will generate a file in the current directory named `suse-observability_logs_<date>.tar.gz`. Please upload this file to the case.
