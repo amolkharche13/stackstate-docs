@@ -34,7 +34,10 @@ The Non-HA setup can support up to 100 Nodes under observation.
 | **Memory Limits** | 23Gi | 23Gi | 29Gi | 33Gi | 51,5Gi | 131Gi | 147.5Gi | 166Gi |
 
 {% hint style="info" %}
-The requirement shown for profile represent the total amount of resources needed to run the Suse Observability workload, the user can decide the amount of nodes and the node size they prefer as long as the requirements are met.
+The requirement shown for profile represent the total amount of resources needed to run the Suse Observability server.
+To ensure that all different services of Suse Observability server can be allocated:
+* For non-HA installations the recommended node size is 4VCPU, 8GB
+* For HA installations the min recommended node size is 8VCPU, 16GB
 {% endhint %}
 
 {% hint style="info" %}
