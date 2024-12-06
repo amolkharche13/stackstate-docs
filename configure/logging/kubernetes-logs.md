@@ -11,10 +11,10 @@ If you're experiencing unexpected behavior, degraded performance, or a failure i
 ## Notes
 
 The script should be executed from a host that has kubectl configured with access to the SUSE Observability cluster or from any other host with the necessary permissions and connectivity to the cluster. 
-This can be done directly on the node using the root user or via sudo.  If kubeconfig is not set, use the command `export KUBECONFIG=$PATH-TO-YOUR/kubeconfig`.
+This can be done directly on the host using the root user or via sudo.  If kubeconfig is not set, use the command `export KUBECONFIG=$PATH-TO-YOUR/kubeconfig`.
 
 ## Usage
-The script needs to be downloaded and run directly on the node, using the `root` user or `sudo`.
+The script needs to be downloaded and run directly on the host, using the `root` user or `sudo`.
 
 ### Download and run the script
 * Save the script as: `suse-observability_logs_collector.sh`
