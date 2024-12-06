@@ -4,12 +4,6 @@
 # Namespace to collect information
 NAMESPACE="suse-observability"
 
-# Check if namespace exist or not
-if ! kubectl get namespace "$NAMESPACE" &>/dev/null; then
-    echo "Namespace '$NAMESPACE' does not exist. Exiting."
-    exit 1
-fi
-
 # Check if kubectl is installed or not
 if ! command -v kubectl &>/dev/null; then
    echo "kubectl is not installed. Please install it and try again."
@@ -21,6 +15,12 @@ if [[ -z "$KUBECONFIG" || ! -f "$KUBECONFIG" ]]; then
     echo "Error: KUBECONFIG is not set. Please ensure KUBECONFIG is set to the path of a valid kubeconfig file before running this script."
     echo "If kubeconfig is not set, use the command: export KUBECONFIG=PATH-TO-YOUR/kubeconfig. Exiting..."
  exit 1
+fi
+
+# Check if namespace exist or not
+if ! kubectl get namespace "$NAMESPACE" &>/dev/null; then
+    echo "Namespace '$NAMESPACE' does not exist. Exiting."
+    exit 1
 fi
 # Directory to store logs
 OUTPUT_DIR="${NAMESPACE}_logs_$(date +%Y%m%d%H%M%S)"
@@ -52,8 +52,6 @@ collect_yaml_configs() {
     kubectl -n "$NAMESPACE" get deployments -o yaml > "$OUTPUT_DIR/yaml/deployments.yaml"
     # ConfigMap YAMLs
     kubectl -n "$NAMESPACE" get configmaps -o yaml > "$OUTPUT_DIR/yaml/configmaps.yaml"
-    # Secret YAMLs
-    kubectl -n "$NAMESPACE" get secrets -o yaml > "$OUTPUT_DIR/yaml/secrets.yaml"
     # Cronjob YAMLs
     kubectl -n "$NAMESPACE" get cronjob -o yaml > "$OUTPUT_DIR/yaml/cronjob.yaml"
 
@@ -63,17 +61,15 @@ collect_yaml_configs() {
 collect_pod_logs() {
     techo "Collecting pod logs..."
     PODS=$(kubectl -n "$NAMESPACE" get pods -o jsonpath="{.items[*].metadata.name}")
-    for pod in $PODS; do (
+    for pod in $PODS; do
         mkdir -p "$OUTPUT_DIR/pods/$pod"
         CONTAINERS=$(kubectl -n "$NAMESPACE" get pod "$pod" -o jsonpath="{.spec.containers[*].name}")
         for container in $CONTAINERS; do
             kubectl -n "$NAMESPACE" logs "$pod" -c "$container" > "$OUTPUT_DIR/pods/$pod/${container}.log" 2>&1
             kubectl -n "$NAMESPACE" logs "$pod" -c "$container" --previous > "$OUTPUT_DIR/pods/$pod/${container}_previous.log" 2>/dev/null
         done
-        ) &
     done
-    wait
-}
+ }
 
 
 # Collect general pod statuses
