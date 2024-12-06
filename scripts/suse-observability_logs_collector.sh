@@ -41,7 +41,9 @@ collect_yaml_configs() {
     techo "Collecting YAML configurations..."
 
     mkdir -p "$OUTPUT_DIR/yaml"
-
+    
+    # Pods YAMLs
+    kubectl -n "$NAMESPACE" get pod -o yaml> "$OUTPUT_DIR/yaml/pods.yaml"
     # StatefulSet YAMLs
     kubectl -n "$NAMESPACE" get statefulsets -o yaml > "$OUTPUT_DIR/yaml/statefulsets.yaml"
     # DaemonSet YAMLs
@@ -83,7 +85,7 @@ kubectl -n "$NAMESPACE" describe statefulsets > "$OUTPUT_DIR/statefulsets_descri
 
 # Collect DaemonSets information
 techo "Collecting DaemonSets information..."
-kubectl -n "$NAMESPACE" get daemonsets  > "$OUTPUT_DIR/daemonsets"
+kubectl -n "$NAMESPACE" get daemonsets -o wide > "$OUTPUT_DIR/daemonsets"
 kubectl -n "$NAMESPACE" describe daemonsets > "$OUTPUT_DIR/daemonsets_describe"
 
 techo "Collecting Deployments information..."
