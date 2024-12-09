@@ -4,7 +4,7 @@ description: SUSE Observability Self-hosted
 
 # Advanced Troubleshooting
 
-When you are a prime customer, reach out to SUSE Observability support at (https://scc.suse.com/) to get help setting up SUSE Observability in your local cluster. Use [Support Package (Logs)](/setup/install-stackstate/support-package-logs.md) to collect information about your instance for the support team.
+When you are a prime customer, reach out to SUSE Observability support at [https://scc.suse.com/](https://scc.suse.com/) to get help setting up SUSE Observability in your local cluster. Use [Support Package (Logs)](/setup/install-stackstate/support-package-logs.md) to collect information about your instance for the support team.
 
 This page provides detailed information on the subsystems of the SUSE Observability platform to troubleshoot deployment and operational issues. This page should only be consulted when the steps in the [troubleshooting](/setup/install-stackstate/troubleshooting.md) do not yield a solution.
 
