@@ -16,7 +16,7 @@ For support please file a support case in [SUSE Customer Center (SCC)](https://s
 ## Prerequisites
 
 ### License key
-A license key for SUSE Observability server can be obtained via the SUSE Customer Center and will be shown as "SUSE Rancher Prime - Observability Tech Preview" Registration Code. This license is valid until Oct, 31 2024. Before the end a license will be made available which is valid until the end of your Rancher Prime subscription.
+A license key for SUSE Observability server can be obtained via the SUSE Customer Center in the Subscription tab and will be shown as "SUSE Observability" Registration Code. This license is valid until the end of your Rancher Prime subscription.
 
 ### Requirements
 To install SUSE Observability, ensure that the nodes have enough CPU and memory capacity. Below are the specific requirements.
@@ -32,6 +32,13 @@ The Non-HA setup can support up to 100 Nodes under observation.
 | **CPU Limits** | 16 | 16 | 21,5 | 30,5 | 50 | 103 | 128 | 176 |
 | **Memory Requests** | 22Gi | 22Gi | 28Gi | 32.5Gi | 51Gi | 67Gi | 143Gi | 161.5Gi |
 | **Memory Limits** | 23Gi | 23Gi | 29Gi | 33Gi | 51,5Gi | 131Gi | 147.5Gi | 166Gi |
+
+{% hint style="info" %}
+The requirement shown for profile represent the total amount of resources needed to run the Suse Observability server.
+To ensure that all different services of Suse Observability server can be allocated:
+* For non-HA installations the recommended node size is 4VCPU, 8GB
+* For HA installations the min recommended node size is 8VCPU, 16GB
+{% endhint %}
 
 {% hint style="info" %}
 A trial setup is a 10 non-HA setup configured with a 3 day retention and lower disk space requirements.

@@ -5,6 +5,7 @@ description: SUSE Observability Self-hosted v5.1.x
 # SUSE Observability logs
 
 ## Overview
+
 This page provides tools and guidance for collecting logs from a SUSE Observability cluster. These logs are essential for diagnosing issues, identifying root causes, and troubleshooting problems in clusters that may not be functioning as expected.
 If you're experiencing unexpected behavior, degraded performance, or a failure in your SUSE Observability cluster, this page will help you gather the necessary data to understand what went wrong and take corrective action.
 
