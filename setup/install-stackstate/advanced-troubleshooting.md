@@ -32,7 +32,8 @@ SUSE Observability is powered by various databases, whenever a database is misbe
   - `suse-observability-kafka-<n>`: Main kafka deployment
   - `<release-name>-kafkaup-operator-kafkaup-*`: Helper operator performing kafka upgrades
 - `StackGraph`: StackGraph stored (user-)settings and the topology. StackGraph is built out of multiple components and has 2 deployment modes. HA and nonHA.
-  - `Tephra`: Manager database transaction starts, commits and conflicts served by pod `<release-name>-hbase-tephra-<n>`
+  - `Tephra`: Manages database transaction starts, commits and conflicts. Served by pod `<release-name>-hbase-tephra-<n>`
+    - `<release-name>-hbase-tephra-<n>`: Name-node for HDFS, keeps track of file index
   - `HBase-HA`: Stores the StackGraph data, spread over multiple pods with different responsibilities: 
     - `<release-name>-hbase-hdfs-nn-0`: Name-node for HDFS, keeps track of file index
     - `<release-name>-hbase-hdfs-snn-0`: Secondary name-node, does cleanup work after the name-node
@@ -56,11 +57,11 @@ SUSE Observability platform gets data pushed by the agent and OpenTelemetry (OTE
 
 - `Receiver`: The receiver implements the collection-side api for the SUSE Observability agent. It accepts and authorizes telemetry data (logs, events, metrics or topology) and forwards it to the corresponding datastore or kafka. It can be deployed in single or split mode:
   - `Receiver-Split`:
-    - `<release-name>-suse-observability-receiver-logs`: Receives logs and puts them into ElasticSearch
-    - `<release-name>-suse-observability-receiver-process-agent`: Receives process and network connectivity information and forwards it to kafka topics
-    - `<release-name>-suse-observability-receiver-base`: All other SUSE Observability Agent data comes through here.
+    - `<release-name>-suse-observability-receiver-logs-*`: Receives logs and puts them into ElasticSearch
+    - `<release-name>-suse-observability-receiver-process-agent-*`: Receives process and network connectivity information and forwards it to kafka topics
+    - `<release-name>-suse-observability-receiver-base`-*: All other SUSE Observability Agent data comes through here.
   - `Receiver-NonSplit`:
-    - `<release-name>-suse-observability-receiver`: All SUSE Observability Agent data comes through here. 
+    - `<release-name>-suse-observability-receiver-*`: All SUSE Observability Agent data comes through here. 
 - `OpenTelemetry Collector`: Provides an endpoint OpenTelemetry agents can push OpenTelemetry data to and produces traces, metrics and topology based on the pushed data.
    - `suse-observability-otel-collector-0`: Single pod implementing the OTEL collector
 
@@ -90,15 +91,19 @@ SUSE Observability platform preforms correlation and monitoring  on the telemetr
 ### Miscellaneous
 
 - `Routing`: Accept connections and route to the right backend service:
-  - `nightly-suse-observability-router-`: Router based on envoy
+  - `<release-name>-suse-observability-router-`: Router based on envoy
 - `UI`: React-based UI
-  - `nightly-suse-observability-ui`: Serves just the static UI code and assets, all dynamic behavior is done by the `api`
+  - `<release-name>-suse-observability-ui`: Serves just the static UI code and assets, all dynamic behavior is done by the `api`
 - `Backup/Restore`: Periodically run jobs to backup the various data stores. Has one continuously running pod:
   - `suse-observability-minio-*`: Provides an abstract interface for interacting with backup storage.
 
 ## Relations between subsystems
 
+To effectively find the root cause of a problem, it is important to understand what pods are dependent on others when deployed. The following diagram shows an overview of the pods with TCP connections that can exist between them. When looking for a root cause it makes sense to look to the pod that is 'lowest' in this dependency chain.
 
+The pod name in this diagram are abbreviated for brevity.
+
+![Pod TCP Dependencies](../../.gitbook/assets/Pod_TCP_diagram.png)
 
 
 
