@@ -37,7 +37,7 @@ SUSE Observability is powered by various databases, whenever a database is misbe
   - `HBase-HA`: Stores the StackGraph data, spread over multiple pods with different responsibilities: 
     - `<release-name>-hbase-hdfs-nn-0`: Name-node for HDFS, keeps track of file index
     - `<release-name>-hbase-hdfs-snn-0`: Secondary name-node, does cleanup work after the name-node
-    - `<release-name>-hbase-hdfs-dfs-<n>`: HDFS Datanode, stores the actual data
+    - `<release-name>-hbase-hdfs-dn-<n>`: HDFS Datanode, stores the actual data
     - `<release-name>-hbase-hbase-master-<n>`: HBase Master, coordinates tables and regions 
     - `<release-name>-hbase-hbase-rs-<n>`: HBase Region Server, serves tables and regions, stores its data on HDFS
   - `HBase-non-HA`:
