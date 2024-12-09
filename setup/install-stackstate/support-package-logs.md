@@ -2,7 +2,7 @@
 description: SUSE Observability Self-hosted v5.1.x
 ---
 
-# SUSE Observability logs
+# SUSE Observability Support Package (logs)
 
 ## Overview
 
