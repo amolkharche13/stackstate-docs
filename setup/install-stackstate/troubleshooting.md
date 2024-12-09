@@ -30,12 +30,12 @@ Here is a quick guide for troubleshooting the startup of SUSE Observability:
    For pods with state `ImagePullBackOff` also check the exact error message, common causes are:
    * An incorrect username/password used to pull the images
    * Connecting to the docker registry failed, this can be due to authentication issues or connectivity issues (firewalls, air-gapped installations)
-   * A typo in the overriden docker image registry URL
+   * A typo in the overridden docker image registry URL
 
    To find out a more detailed cause for the `Pending`, `ImagePullBackOff` or `CrashLoopBackOff` states use this command:
    
    ```text
-   kubectl describe pod<pod-name>
+   kubectl describe pod <pod-name>
    ```
    
    The output contains an `event` section at the end which usually contains the problem. It also has a `State` section for each container that has more details for termination of the container.

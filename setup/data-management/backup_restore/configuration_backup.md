@@ -16,10 +16,10 @@ The configuration backup is enabled by default. In its default setup it will mak
 
 Scripts to work with configuration backups (but also all other backups) can be downloaded from the [latest release for the SUSE Observability Helm chart](https://github.com/StackVista/helm-charts/releases/latest). Download and extract the `backup-scripts-<version>.tar.gz` to get started.
 
-**Before you use the scripts, ensure that** the `kubectl` binary is installed and it is configured with the context and namespace where SUSE Observability is installed. For example run this command to connect to the context `observability-cluster` and namespace `suse-observablity`:
+**Before you use the scripts, ensure that** the `kubectl` binary is installed and it is configured with the context and namespace where SUSE Observability is installed. For example run this command to connect to the context `observability-cluster` and namespace `suse-observability`:
 ```
 kubectl config use-context observability-cluster
-kubectl config set-context --current --namespace=suse-observablity
+kubectl config set-context --current --namespace=suse-observability
 ```
 
 The command line tools to interact with the backups all work by creating a Kubernetes job in the cluster and interacting with that job. After the tool is done the job is automatically removed. Starting the job can take some time (pulling the docker image, scheduling the job in the cluster, etc, all take some time), so the commands will not produce a result immediately.
