@@ -41,7 +41,7 @@ SUSE Observability is powered by various databases, whenever a database is misbe
     - `<release-name>-hbase-hbase-master-<n>`: HBase Master, coordinates tables and regions 
     - `<release-name>-hbase-hbase-rs-<n>`: HBase Region Server, serves tables and regions, stores its data on HDFS
   - `HBase-non-HA`:
-    - `<release-name>-hbase-stackgraph-0`: All StackGraph components deployed as a single pod in `non-HA` setup. 
+    - `<release-name>-hbase-stackgraph-0`: All StackGraph components deployed as a single pod in `non-HA` setup. This also includes its own zookeeper instance.
 - `VictoriaMetrics`: Stores metric data. Is deployed by the pods:
   - `suse-observability-victoria-metrics-<n>-0`: Main VictoriaMetrics data store/query node
   - `suse-observability-vmagent-0`: Ingestion agent for VictoriaMetrics. Data is pushed to vmagent before being forwarded and stored. 
