@@ -40,10 +40,9 @@ Here is a quick guide for troubleshooting the startup of SUSE Observability:
    
    The output contains an `event` section at the end which usually contains the problem. It also has a `State` section for each container that has more details for termination of the container.
 
-3. [Check the logs](/configure/logging/kubernetes-logs.md) for errors.
-4. Check the Knowledge base on the [SUSE Observability Support site](https://support.stackstate.com/).
+3. When you are a prime customer, reach out to SUSE Observability support at [https://scc.suse.com/](https://scc.suse.com/) to get help setting up SUSE Observability in your local cluster. Use [Support Package (Logs)](/setup/install-stackstate/support-package-logs.md) to collect information about your instance for the support team.
+4. In case the above steps did not resolve the issue, there is an [Advanced Troubleshooting Guide](./advanced-troubleshooting.md) available.
 
-## Known issues
 
-Check the [SUSE Observability support Knowledge base](https://support.stackstate.com/hc/en-us/sections/360004684540-Known-issues) to find troubleshooting steps for all known issues.
+
 
