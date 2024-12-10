@@ -33,7 +33,7 @@ SUSE Observability is powered by various databases, whenever a database is misbe
   - `<release-name>-kafkaup-operator-kafkaup-*`: Helper operator performing kafka upgrades
 - `StackGraph`: StackGraph stored (user-)settings and the topology. StackGraph is built out of multiple components and has 2 deployment modes. HA and nonHA.
   - `Tephra`: Manages database transaction starts, commits and conflicts. Served by pod `<release-name>-hbase-tephra-<n>`
-    - `<release-name>-hbase-tephra-<n>`: Name-node for HDFS, keeps track of file index
+    - `<release-name>-hbase-tephra-<n>`: Tephra transaction server pod. Keeps track of transactions and conflicts.
   - `HBase-HA`: Stores the StackGraph data, spread over multiple pods with different responsibilities: 
     - `<release-name>-hbase-hdfs-nn-0`: Name-node for HDFS, keeps track of file index
     - `<release-name>-hbase-hdfs-snn-0`: Secondary name-node, does cleanup work after the name-node
