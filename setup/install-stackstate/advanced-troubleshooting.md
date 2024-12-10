@@ -41,24 +41,24 @@ SUSE Observability is powered by various databases, whenever a database is misbe
     - `<release-name>-hbase-hbase-master-<n>`: HBase Master, coordinates tables and regions 
     - `<release-name>-hbase-hbase-rs-<n>`: HBase Region Server, serves tables and regions, stores its data on HDFS
   - `HBase-non-HA`:
-    - `<release-name>-hbase-stackgraph-0`: All StackGraph data is stored in this single pod in `non-HA` setup. 
+    - `<release-name>-hbase-stackgraph-0`: All StackGraph components deployed as a single pod in `non-HA` setup. 
 - `VictoriaMetrics`: Stores metric data. Is deployed by the pods:
   - `suse-observability-victoria-metrics-<n>-0`: Main VictoriaMetrics data store/query node
   - `suse-observability-vmagent-0`: Ingestion agent for VictoriaMetrics. Data is pushed to vmagent before being forwarded and stored. 
 - `ClickHouse`: Stores trace data. Deployed by the following pod(s):
   - `suse-observability-clickhouse-shard0-<n>`: Main clickhouse store
 - `ElasticSearch`: Stores events and logs. Deployed by the following pods:
-  - `suse-observability-elasticsearch-master-<n>`: Main elasticsearch store
-  - `<release-name>-prometheus-elasticsearch-exporter-*`: Exports deployment metrics of the elasticsearch instances
+  - `suse-observability-elasticsearch-master-<n>`: Main Elasticsearch store
+  - `<release-name>-prometheus-elasticsearch-exporter-*`: Exports performance metrics of the Elasticsearch instances
 
 ### Ingestion services
 
 SUSE Observability platform gets data pushed by the agent and OpenTelemetry (OTEL) agent. The ingestion services perform initial processing and bring the data to storage.
 
-- `Receiver`: The receiver implements the collection-side api for the SUSE Observability agent. It accepts and authorizes telemetry data (logs, events, metrics or topology) and forwards it to the corresponding datastore or kafka. It can be deployed in single or split mode:
+- `Receiver`: The receiver implements the collection-side API for the SUSE Observability agent. It accepts and authorizes telemetry data (logs, events, metrics or topology) and forwards it to the corresponding datastore or Kafka. It can be deployed in single or split mode:
   - `Receiver-Split`:
-    - `<release-name>-suse-observability-receiver-logs-*`: Receives logs and puts them into ElasticSearch
-    - `<release-name>-suse-observability-receiver-process-agent-*`: Receives process and network connectivity information and forwards it to kafka topics
+    - `<release-name>-suse-observability-receiver-logs-*`: Receives logs and puts them into Elasticsearch
+    - `<release-name>-suse-observability-receiver-process-agent-*`: Receives process and network connectivity information and forwards it to Kafka topics
     - `<release-name>-suse-observability-receiver-base`-*: All other SUSE Observability Agent data comes through here.
   - `Receiver-NonSplit`:
     - `<release-name>-suse-observability-receiver-*`: All SUSE Observability Agent data comes through here. 
@@ -71,9 +71,9 @@ SUSE Observability platform preforms correlation and monitoring  on the telemetr
 
 - `Correlator`: Correlates tcp connection information to turn it into topology. Implemented by pod:
   - `<release-name>-suse-observability-correlate-*`
-- `Events2ElasticSearch`: Processes events and stores them in ElasticSearch: Implemented by pod:
+- `Events2Elasticsearch`: Processes events and stores them in Elasticsearch: Implemented by pod:
   - `<release-name>-suse-observability-e2es-*`
-- `Anomaly Detection`: The SUSE Observability platform does anomaly detection on metrics, producing health violations:
+- `Anomaly Detection`: The SUSE Observability platform does anomaly detection (disabled by default) on metrics, producing health violations:
   - `<release-name>-anomaly-detection-spotlight-manager-*`: Distributed anomaly detection work
   - `<release-name>-anomaly-detection-spotlight-worker-*`: Performs anomaly detection on metric streams
 - `Platform-Distributed`: The platform contains the main processing components and serving api. In distributed mode functional units are split out. The pods that belong to the platform: 
@@ -81,7 +81,7 @@ SUSE Observability platform preforms correlation and monitoring  on the telemetr
   - `<release-name>-suse-observability-checks-*`: Runs the monitors
   - `<release-name>-suse-observability-health-sync-*`: Processes health (violation) information from monitors and the SUSE Observability Agent and attaches it to topology.
   - `<release-name>-suse-observability-initializer-*`: Coordinates initialization of the datastores and migrations
-  - `<release-name>-suse-observability-notification-*`: Forwards notifications based on health violations and user setting to downstream systems like slack/opsgenie. 
+  - `<release-name>-suse-observability-notification-*`: Forwards notifications based on health violations and user setting to downstream systems like Slack/Opsgenie. 
   - `<release-name>-suse-observability-slicing-*`: Continuously optimizes the topology history for quick retrieval 
   - `<release-name>-suse-observability-state-*`: Processing health violations and aggregates them into component health
   - `<release-name>-suse-observability-sync-*`: Processes topology data combined with user settings and turns it into the topology graph.
@@ -91,7 +91,7 @@ SUSE Observability platform preforms correlation and monitoring  on the telemetr
 ### Miscellaneous
 
 - `Routing`: Accept connections and route to the right backend service:
-  - `<release-name>-suse-observability-router-`: Router based on envoy
+  - `<release-name>-suse-observability-router-`: Router based on Envoy
 - `UI`: React-based UI
   - `<release-name>-suse-observability-ui`: Serves just the static UI code and assets, all dynamic behavior is done by the `api`
 - `Backup/Restore`: Periodically run jobs to backup the various data stores. Has one continuously running pod:
