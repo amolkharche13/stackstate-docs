@@ -6,7 +6,7 @@ description: SUSE Observability
 
 ## Configure Opsgenie notifications
 
-To send notifications to Slack follow these steps:
+To send notifications to Opsgenie follow these steps:
 
 1. [Create an integration in OpsGenie](#create-integration)
 2. [Create the channel](#create-and-test-the-channel)
