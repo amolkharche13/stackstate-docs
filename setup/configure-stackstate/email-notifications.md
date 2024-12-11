@@ -17,6 +17,33 @@ SaaS users of SUSE Observability can use E-mail notifications without extra conf
 SUSE Observability needs to be configured with credentials to connect to the SMTP server. You can do this by adding the following to the `values.yaml` file of your SUSE Observability installation:
 
 {% tabs %}
+{% tab title="Chart version 2.2.0" %}
+
+```yaml
+stackstate:
+  email:
+    enabled: true
+    sender: "stackstate@example.com"
+    server:
+      host: "smtp.example.com"
+      auth:
+        username: "<user name>"
+        password: "<user password>"
+```
+These are all the other options that can be customized:
+
+```yaml
+stackstate:
+  email:
+    additionalProperties: 
+      # Add needed Java email properties for your mail server (use string values), defaults are: 
+      "mail.smtp.auth": "true"
+      "mail.smtp.starttls.enable": "true"
+    server:
+      protocol: smtp
+      port: 587
+```
+{% endtab %}
 {% tab title="Chart version 2.1.0" %}
  
 ```yaml
@@ -38,35 +65,6 @@ stackstate.components.all.extraEnv.open:
   CONFIG_FORCE_stackstate_email_server_port: 465
 ```
 
-{% endtab %}
-{% tab title="Chart version 2.2.0" %}
-
-```yaml
-stackstate:
-  email:
-    enabled: true
-    sender: "smtpuser@smtpstackstate.do.support.rancher.space"
-    server:
-      host: "smtpstackstate.do.support.rancher.space"
-      port: 25
-      protocol: smtp
-      auth:
-        username: "smtpuser"
-        password: "12345678"
-```
-These are all the other options that can be customized:
-
-```yaml
-stackstate:
-  email:
-    additionalProperties: 
-      # Add needed Java email properties for your mail server (use string values), defaults are: 
-      "mail.smtp.auth": "true"
-      "mail.smtp.starttls.enable": "true"
-    server:
-      protocol: smtp
-      port: 587
-```
 {% endtab %}
 {% endtabs %}
 
@@ -108,7 +106,13 @@ If your configuration is correct, you will receive a test email.
 ```
    postfix/smtpd[6310]: NOQUEUE: reject: RCPT from unknown[165.232.178.159]: 454 4.7.1 Relay access denied; from=<example.com> to=<user1> proto=ESMTP helo=<suse-observability-server-8f6866c5d-46bth>
 ```
-Try adding the domain to relay_domains in the `main.cf`: 
+   Try adding the domain to relay_domains in the `main.cf`: 
 ```
    relay_domains = example.com
+```
+4. If you encounter the error below, it indicates a connection issue between the client (or sender) and the SMTP server. To troubleshoot, test the connection between the servers by running the following command: `telnet smtp.example.com 25`.
+```
+        "message": "Operation timeout error.",
+        "errorCode": 408,
+        "_type": "ServerTimeoutError"
 ```
