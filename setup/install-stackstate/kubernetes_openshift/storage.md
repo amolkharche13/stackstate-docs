@@ -21,21 +21,8 @@ For the `size` we provide the sameple for both `HA` and `NonHa` depending on the
 {% tab title="Changing storage class" %}
 ```yaml
 global:
-  # The storage class for most of the persistent volumes
+  # The storage class for all of the persistent volumes
   storageClass: "standard"
-
-elasticsearch:
-  volumeClaimTemplate:
-    storageClassName: "standard"
-
-victoria-metrics-0:
-  server:
-    persistentVolume:
-      storageClass: "standard"
-victoria-metrics-1:
-  server:
-    persistentVolume:
-      storageClass: "standard"
 ```
 {% endtab %}
 

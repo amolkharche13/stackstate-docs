@@ -123,10 +123,12 @@
   * [E-mail notifications](setup/configure-stackstate/email-notifications.md)
   * [Stackpacks](stackpacks/about-stackpacks.md)
 * [Release Notes](setup/release-notes/README.md)
-  * [v2.0.0 - 11/09/2024](setup/release-notes/20240911112250.md)
-  * [v2.0.1 - 18/09/2024](setup/release-notes/20240918082712.md)
-  * [v2.0.2 - 01/10/2024](setup/release-notes/20241001154902.md)
-  * [v2.1.0 - 29/10/2024](setup/release-notes/20241023133226.md)
+  * [v2.0.0 - 11/09/2024](setup/release-notes/v2.0.0.md)
+  * [v2.0.1 - 18/09/2024](setup/release-notes/v2.0.1.md)
+  * [v2.0.2 - 01/10/2024](setup/release-notes/v2.0.2.md)
+  * [v2.1.0 - 29/10/2024](setup/release-notes/v2.1.0.md)
+  * [v2.2.0 - 09/12/2024](setup/release-notes/v2.2.0.md)
+  * [v2.2.1 - 10/12/2024](setup/release-notes/v2.2.1.md)
 * [Upgrade SUSE Observability](setup/upgrade-stackstate/README.md)
   * [Migration from StackState](setup/upgrade-stackstate/migrate-from-6.md)
   * [Steps to upgrade](setup/upgrade-stackstate/steps-to-upgrade.md)
@@ -144,6 +146,7 @@
 * [Security](setup/security/README.md)
   * [Authentication](setup/security/authentication/README.md)
     * [Authentication options](setup/security/authentication/authentication_options.md)
+    * [Single password](/setup/security/authentication/single_password.md)
     * [File-based](setup/security/authentication/file.md)
     * [LDAP](setup/security/authentication/ldap.md)
     * [Open ID Connect \(OIDC\)](setup/security/authentication/oidc.md)
@@ -155,6 +158,7 @@
     * [Roles](setup/security/rbac/rbac_roles.md)
     * [Scopes](setup/security/rbac/rbac_scopes.md)
   * [Self-signed certificates](setup/security/self-signed-certificates.md)
+  * [External secrets](setup/security/external-secrets.md)
 
 
 ## 🔐 Security

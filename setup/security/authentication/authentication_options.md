@@ -4,10 +4,11 @@ description: SUSE Observability Self-hosted
 
 # Authentication options
 
-Out of the box, SUSE Observability is configured with [file-based authentication](file.md) with a username and password [configured during installation](../../../setup/install-stackstate/initial_run_guide.md#default-username-and-password). This authenticates users with a file on the server. However, this isn't a production-ready setup.
+Out of the box, SUSE Observability is configured with [single password authentication](file.md) with admin user and random password [configured during installation](../../../setup/install-stackstate/initial_run_guide.md#default-username-and-password). This authenticates users with a simple secret on the server. However, this isn't a production-ready setup.
 
 For better security SUSE Observability can be configured to use exactly one of the following authentication mechanisms \(replacing the standard admin user\):
 
+* [Single password](single_password.md)
 * [File based](file.md)
 * [LDAP](ldap.md)
 * [Open ID Connect \(OIDC\)](oidc.md)
@@ -25,7 +26,6 @@ When a user has been authenticated permissions for that user are usually assigne
 * **Kubernetes Troubleshooter** - able to see all information and see and change monitors and metric configuration.
 * **Power User** - able to see and change all configuration and install StackPacks.
 * **Administrator** - able to see and change content of SUSE Observability. For example, see all configuration, install StackPacks, grant and revoke user permissions and upload \(new versions of\) StackPacks.
-* **Platform Administrator** - able to perform management of the SUSE Observability platform. For example, change data retention, clear the database, view logs and cache management.
 
 When deciding on the roles to assign your users, it's strongly advised to have only a small group of Platform Administrators and Administrators. For example, only the engineers responsible for installing SUSE Observability and doing the initial configuration. Administrator users can manage access to SUSE Observability and decide which StackPacks can be used. You can delegate installation of StackPacks and other fine-tuning of the configuration to a larger number of users with the Power User role. Platform Administrator users can clear the database, change data retention settings, view logs and perform other platform management tasks.
 

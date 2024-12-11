@@ -100,6 +100,21 @@ Follow the steps below to configure SUSE Observability to create a bootstrap ser
 * The authentication configuration is stored as a Kubernetes secret.
 {% endhint %}
 
+#### Setup the bootstrap service token from an external secret
+
+When the bootstrap token should come from an external secret, follow [these steps](/setup/security/external-secrets.md#getting-authentication-data-from-an-external-secret) and add the following data:
+
+```yaml
+kind: Secret
+metadata:
+   name: "<custom-secret-name>"
+type: Opaque
+data:
+  bootstrap_token: <base64 of token>
+```
+
+This token can be added to the secret next to the data that is already there.
+
 ### List service tokens
 
 The ID, name, expiration date and roles of all created service tokens can be seen using the new `sts` CLI. For example:
@@ -131,7 +146,7 @@ A service token can be used for authentication with the `sts` CLI. For details, 
 
 ### SUSE Observability APIs
 
-To use a service token to talk directly to the SUSE Observability Base API or the SUSE Observability Admin API, add it to the header of the request in one of the following ways:
+To use a service token to talk directly to the SUSE Observability Base API, add it to the header of the request in one of the following ways:
 
 * In the `Authorization` header:
     ```bash

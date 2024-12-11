@@ -50,12 +50,11 @@ stackstate:
       #   groupsField: roles
 
     # map the roles from Keycloak to the
-    # 4 standard subjects in SUSE Observability (guest, powerUser, admin and platformAdmin)
+    # 3 standard subjects in SUSE Observability (guest, powerUser and admin)
     roles:
       guest: ["keycloak-guest-role-for-stackstate"]
       powerUser: ["keycloak-power-user-role-for-stackstate"]
       admin: ["keycloak-admin-role-for-stackstate"]
-      platformAdmin: ["keycloak-platformadmin-role-for-stackstate"]
 ```
 
 {% hint style="info" %}
@@ -76,7 +75,7 @@ Follow the steps below to configure SUSE Observability to authenticate using Key
    * **jwtClaims** - Optional: The roles or username can be retrieved from a different attribute than the Keycloak default behavior
      * **usernameField** - Optional: The field in the OIDC user profile that should be used as the username. By default, this will be the `preferred_username`.
      * **groupsField** - Optional: SUSE Observability will always, and by default only, use the `roles` Keycloak provides. But it can also add roles from the field specified here. This is mainly useful when Keycloak is mapping roles/groups from a third-party system.
-2. In `authentication.yaml` - map user roles from KeyCloak to the correct SUSE Observability subjects using the `roles.guest`, `roles.powerUser`, `roles.platformAdmin` or `roles.admin` settings \(see the example above\). For details, see the [default SUSE Observability roles](../rbac/rbac_permissions.md#predefined-roles). More SUSE Observability roles can also be created, see the [RBAC documentation](../rbac/).
+2. In `authentication.yaml` - map user roles from KeyCloak to the correct SUSE Observability subjects using the `roles.guest`, `roles.powerUser` or `roles.admin` settings \(see the example above\). For details, see the [default SUSE Observability roles](../rbac/rbac_permissions.md#predefined-roles). More SUSE Observability roles can also be created, see the [RBAC documentation](../rbac/).
 3. Store the file `authentication.yaml` together with the `values.yaml` file from the SUSE Observability installation instructions.
 4. Run a Helm upgrade to apply the changes:
 
@@ -98,9 +97,24 @@ Follow the steps below to configure SUSE Observability to authenticate using Key
 * The authentication configuration is stored as a Kubernetes secret.
 {% endhint %}
 
+### Using an external secret
+
+When the keycloak secrets should come from an external secret, follow [these steps](/setup/security/external-secrets.md#getting-authentication-data-from-an-external-secret) but fill in the following data:
+
+```yaml
+kind: Secret
+metadata:
+   name: "<custom-secret-name>"
+type: Opaque
+data:
+  keycloak_client_id: <base64 of client id>
+  keycloak_secret: <base64 of secret>
+```
+
 ## See also
 
 * [Authentication options](authentication_options.md)
 * [Permissions for predefined SUSE Observability roles](../rbac/rbac_permissions.md#predefined-roles)
 * [Create RBAC roles](../rbac/rbac_roles.md)
+* [External Secrets](/setup/security/external-secrets.md#getting-authentication-data-from-an-external-secret)
 

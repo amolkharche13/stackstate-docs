@@ -49,12 +49,11 @@ stackstate:
         # groupMemberKey: "member:1.2.840.113556.1.4.1941:"
 
     # map the groups from LDAP to the
-    # standard subjects in SUSE Observability (guest, powerUser, admin and platformAdmin)
+    # standard subjects in SUSE Observability (guest, powerUser and admin)
     roles:
       guest: ["ldap-guest-role-for-stackstate"]
       powerUser: ["ldap-power-user-role-for-stackstate"]
       admin: ["ldap-admin-role-for-stackstate"]
-      platformAdmin: ["ldap-platform-admin-role-for-stackstate"]
 ```
 {% endtab %}
 {% endtabs %}
@@ -122,9 +121,22 @@ suse-observability/suse-observability
 * The authentication configuration is stored as a Kubernetes secret.
 {% endhint %}
 
+### Using an external secret
+
+When the ldap password should come from an external secret, follow [these steps](/setup/security/external-secrets.md#getting-authentication-data-from-an-external-secret) but fill in the following data:
+
+```yaml
+kind: Secret
+metadata:
+   name: "<custom-secret-name>"
+type: Opaque
+data:
+  ldap_password: <base64 of ldap password>
+```
+
 ## See also
 
 * [Authentication options](authentication_options.md)
 * [Permissions for predefined SUSE Observability roles](../rbac/rbac_permissions.md#predefined-roles)
 * [Create RBAC roles](../rbac/rbac_roles.md)
-
+* [External Secrets](/setup/security/external-secrets.md#getting-authentication-data-from-an-external-secret)

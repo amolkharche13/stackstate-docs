@@ -34,7 +34,7 @@ To install and configure the collector for usage with SUSE Observability we'll u
 ### Configure the collector
 
 Here is the full values file needed, continue reading below the file for an explanation of the different parts. Or skip ahead to the next step, but make sure to replace:
-* `<otlp-stackstate-endpoint>` with the OTLP endpoint of your SUSE Observability. If, for example, you access SUSE Observability on `play.stackstate.com` the OTLP endpoint is `otlp-play.stackstate.com`. So simply prefixing `otlp-` to the normal SUSE Observability url will do.
+* `<otlp-stackstate-endpoint>` with the OTLP endpoint of your SUSE Observability. If, for example, you access SUSE Observability on `play.stackstate.com` the OTLP endpoint is `otlp-play.stackstate.com` for GRPC and `otlp-http-play.stackstate.com` for  HTTP traffic. So simply prefixing `otlp-` or `otlp-http-` to the normal SUSE Observability url will do.
 * `<your-cluster-name>` with the cluster name you configured in SUSE Observability. **This must be the same cluster name used when installing the SUSE Observability agent**. Using a differnt cluster name will result in an empty traces perspective for Kubernetes components.
 
 {% hint style="warning" %}
@@ -68,6 +68,10 @@ config:
       auth:
         authenticator: bearertokenauth
       endpoint: <otlp-stackstate-endpoint>:443
+    otlphttp/stackstate:
+       auth:
+          authenticator: bearertokenauth
+       endpoint: https://<otlp--http-stackstate-endpoint>      
   processors:
     tail_sampling:
       decision_wait: 10s
@@ -161,7 +165,7 @@ The `service` section determines what components of the collector are enabled. T
 The `pipelines` section defines pipelines for the traces and metrics. The metrics pipeline defines:
 * `receivers`, to receive metrics from instrumented applications (via the OTLP protocol, `otlp`), from spans (the `spanmetrics` connector) and by scraping Prometheus endpoints (the `prometheus` receiver). The latter is configured by default in the collector Helm chart to scrape the collectors own metrics
 * `processors`: The `memory_limiter` helps to prevent out-of-memory errors. The `batch` processor helps better compress the data and reduce the number of outgoing connections required to transmit the data. The `resource` processor adds additional resource attributes (discussed separately)
-* `exporters`: The `debug` exporter simply logs to stdout which helps when troubleshooting. The `otlp/stackstate` exporter sends telemetry data to SUSE Observability using the OTLP protocol. It is configured to use the bearertokenauth extension for authentication to send data to the SUSE Observability OTLP endpoint.
+* `exporters`: The `debug` exporter simply logs to stdout which helps when troubleshooting. The `otlp/stackstate` exporter sends telemetry data to SUSE Observability using the OTLP protocol via GRPC (Default). The `otlphttp/stackstate` exporter sends telemetry data to SUSE Observability using the OTLP protocol via HTTP and is meant to be used where there area some impediments to use the GRPC one (needs to be activated in the pipelines). Both OTLP exporters are configured to use the bearertokenauth extension for authentication to send data to the SUSE Observability OTLP endpoint.
 
 For traces, there are 3 pipelines that are connected:
 * `traces`: The pipeline that receives traces from SDKs (via the `otlp` receiver) and does the initial processing using the same processors as for metrics. It exports into a router which routes all spans to both other traces pipelines. This setup makes it possible to calculate span metrics for all spans while applying sampling to the traces that are exported.

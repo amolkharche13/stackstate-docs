@@ -41,12 +41,12 @@ stackstate:
         access_type: offline
 
     # map the groups from OIDC provider
-    # to the 4 standard roles in SUSE Observability (guest, powerUser, admin and platformAdmin)
+    # to the 4 standard roles in SUSE Observability (guest, powerUser, k8sTroubleshooter and admin)
     roles:
       guest: ["oidc-guest-role-for-stackstate"]
       powerUser: ["oidc-power-user-role-for-stackstate"]
       admin: ["oidc-admin-role-for-stackstate"]
-      platformAdmin: ["oidc-platform-admin-role-for-stackstate"]
+      k8sTroubleshooter: ["oidc-troubleshooter-role-for-stackstate"]
 ```
 
 Follow the steps below to configure SUSE Observability to authenticate using OIDC:
@@ -106,9 +106,23 @@ jwsAlgorithm: RS256
 
 For further details, see [Permissions and consent in the Microsoft identity platform \(learn.microsoft.com\)](https://learn.microsoft.com/en-us/azure/active-directory/develop/v2-permissions-and-consent).
 
+### Using an external secret
+
+When the oidc secrets should come from an external secret, follow [these steps](/setup/security/external-secrets.md#getting-authentication-data-from-an-external-secret) but fill in the following data:
+
+```yaml
+kind: Secret
+metadata:
+   name: "<custom-secret-name>"
+type: Opaque
+data:
+  oidc_client_id: <base64 of client id>
+  oidc_secret: <base64 of secret>
+```
+
 ## See also
 
 * [Authentication options](authentication_options.md)
 * [Permissions for predefined SUSE Observability roles](../rbac/rbac_permissions.md#predefined-roles)
 * [Create RBAC roles](../rbac/rbac_roles.md)
-
+* [External Secrets](/setup/security/external-secrets.md#getting-authentication-data-from-an-external-secret)

@@ -12,8 +12,7 @@ Every user in SUSE Observability needs to have a subject and a set of [permissio
 
 There are four roles predefined in SUSE Observability:
 
-* **Administrator** - has full access to all views and has all permissions, except for platform management.
-* **Platform Administrator** - has platform management permissions and access to all views.
+* **Administrator** - has full access to all views and has all permissions.
 * **Power User** - typically granted to a user that needs to configure SUSE Observability for a team\(s\), but won't manage the entire SUSE Observability installation.
 * **Kubernetes Troubleshooter** - has all permissions required to use SUSE Observability for troubleshooting, including the ability to enable/disable monitors, create custom views and use the Cli.
 * **Guest** - has read-only access to SUSE Observability.
@@ -23,7 +22,7 @@ The permissions assigned to each predefined SUSE Observability role can be found
 {% tabs %}
 {% tab title="Administrator" %}
 
-The Administrator role \(`stackstate-admin`\): has all permissions assigned, except for `access-admin-api`, which is assigned only to the Platform Administrator predefined role.
+The Administrator role \(`stackstate-admin`\): has all permissions assigned.
 
 Permissions assigned to the predefined Administrator role (`stackstate-admin`) are listed below, these were retrieved using the `sts` CLI. For details of the different permissions and how to manage them using the `sts` CLI, see [RBAC permissions](/setup/security/rbac/rbac_permissions.md).
 
@@ -55,11 +54,13 @@ manage-stackpacks           | system
 manage-star-view            | system    
 manage-telemetry-streams    | system    
 manage-topology-elements    | system    
-perform-custom-query        | system    
-read-metrics                | system    
+perform-custom-query        | system
+read-agents                 | system   
+read-metrics                | system
 read-permissions            | system    
 read-settings               | system    
-read-stackpacks             | system    
+read-stackpacks             | system
+read-system-notifications   | system    
 read-telemetry-streams      | system    
 run-monitors                | system    
 update-permissions          | system    
@@ -67,22 +68,7 @@ update-settings             | system
 update-visualization        | system    
 upload-stackpacks           | system    
 view-monitors               | system
-```
-{% endtab %}
-{% tab title="Platform Administrator" %}
 
-Platform Administrator \(`stackstate-platform-admin`\) is the only predefined role assigned the permission `access-admin-api`.
-
-Permissions assigned to the predefined Platform Administrator role (`stackstate-platform-admin`) are listed below, these were retrieved using the `sts` CLI. For details of the different permissions and how to manage them using the `sts` CLI, see [RBAC permissions](/setup/security/rbac/rbac_permissions.md).
-
-```text
-❯ ./sts rbac describe-permissions --subject stackstate-platform-admin
-access-view      | everything
-access-admin-api | system    
-access-cli       | system    
-access-log-data  | system    
-manage-star-view | system    
-unlock-node      | system 
 ```
 {% endtab %}
 {% tab title="Power User" %}
@@ -120,11 +106,13 @@ manage-stackpacks           | system
 manage-star-view            | system    
 manage-telemetry-streams    | system    
 manage-topology-elements    | system    
-perform-custom-query        | system    
+perform-custom-query        | system
+read-agents                 | system    
 read-metrics                | system    
 read-permissions            | system    
 read-settings               | system    
-read-stackpacks             | system    
+read-stackpacks             | system
+read-system-notifications   | system    
 read-telemetry-streams      | system    
 run-monitors                | system    
 update-settings             | system    
@@ -164,11 +152,13 @@ manage-stackpacks           | system
 manage-star-view            | system    
 manage-telemetry-streams    | system    
 manage-topology-elements    | system    
-perform-custom-query        | system    
+perform-custom-query        | system
+read-agents                 | system    
 read-metrics                | system    
 read-permissions            | system    
 read-settings               | system    
-read-stackpacks             | system    
+read-stackpacks             | system
+read-system-notifications   | system    
 read-telemetry-streams      | system    
 run-monitors                | system    
 update-settings             | system    
@@ -193,7 +183,8 @@ manage-star-view          | system
 perform-custom-query      | system    
 read-metrics              | system    
 read-permissions          | system    
-read-settings             | system    
+read-settings             | system
+read-system-notifications | system    
 read-telemetry-streams    | system    
 update-visualization      | system    
 view-monitors             | system 
@@ -203,7 +194,7 @@ view-monitors             | system
 
 ## Custom roles
 
-In addition to the predefined roles \(`stackstate-admin`, `stackstate-platform-admin`, `stackstate-power-user`, `stackstate-k8s-troubleshooter`, `stackstate-guest`\), which are always available, custom roles can be added. There are multiple ways to add custom roles:
+In addition to the predefined roles \(`stackstate-admin`, `stackstate-power-user`, `stackstate-k8s-troubleshooter`, `stackstate-guest`\), which are always available, custom roles can be added. There are multiple ways to add custom roles:
 
 1. via the configuration file, with the same permission as the predefined roles
 2. via the configuration file, with a custom scope and custom system and view permissions
@@ -222,8 +213,7 @@ stackstate:
       guest: ["ldap-guest-role"]
       powerUser: ["ldap-power-user-role"]
       admin: ["ldap-admin-role"]
-      k8sTroubleshooter: ["ldap-troubleshooter-role"]
-      platformAdmin: ["ldap-platform-admin-role"]
+      k8sTroubleshooter: ["ldap-troubleshooter-role"]      
 ```
 
 To use it in for your SUSE Observability installation \(or already running instance, note that it will restart the API\):
