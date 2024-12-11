@@ -4,7 +4,7 @@ description: SUSE Observability Self-hosted
 
 # Single password
 
-Out of the box, SUSE Observability is configured with a single password configuration, [configured during installation](/k8s-suse-rancher-prime.md#installation). This authenticates users with a single, randomly generated password created by the `sus-observability-values` chart.
+Out of the box, SUSE Observability is configured with a single password configuration, [configured during installation](/k8s-suse-rancher-prime.md#installation). This authenticates users with a single, randomly generated password created by the `suse-observability-values` chart.
 The password value can be found as comment in the generated `suse-observability-values/templates/baseConfig_values.yaml`.
 
 This setup provisions an admin user with the generated password

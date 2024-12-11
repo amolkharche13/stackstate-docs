@@ -41,11 +41,12 @@ stackstate:
         access_type: offline
 
     # map the groups from OIDC provider
-    # to the 4 standard roles in SUSE Observability (guest, powerUser and admin)
+    # to the 4 standard roles in SUSE Observability (guest, powerUser, k8sTroubleshooter and admin)
     roles:
       guest: ["oidc-guest-role-for-stackstate"]
       powerUser: ["oidc-power-user-role-for-stackstate"]
       admin: ["oidc-admin-role-for-stackstate"]
+      k8sTroubleshooter: ["oidc-troubleshooter-role-for-stackstate"]
 ```
 
 Follow the steps below to configure SUSE Observability to authenticate using OIDC:
