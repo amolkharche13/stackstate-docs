@@ -16,6 +16,9 @@ SaaS users of SUSE Observability can use E-mail notifications without extra conf
 
 SUSE Observability needs to be configured with credentials to connect to the SMTP server. You can do this by adding the following to the `values.yaml` file of your SUSE Observability installation:
 
+{% tabs %}
+{% tab title="Chart version 2.1.0" %}
+ 
 ```yaml
 stackstate:
   components:
@@ -28,15 +31,50 @@ stackstate:
         secret:
           CONFIG_FORCE_stackstate_email_server_password: "<user password>"
 ```
-
-To apply the changes, use the command: helm upgrade by passing --values values.yaml,
-This will use port `587` on the SMTP server and uses the `STARTTLS` command to establish a secure connection.
 To use a different port, it can be specified explicitly:
 
 ```yaml
 stackstate.components.all.extraEnv.open:
   CONFIG_FORCE_stackstate_email_server_port: 465
 ```
+
+{% endtab %}
+{% tab title="Chart version 2.2.0" %}
+
+```yaml
+stackstate:
+  email:
+    enabled: true
+    sender: "smtpuser@smtpstackstate.do.support.rancher.space"
+    server:
+      host: "smtpstackstate.do.support.rancher.space"
+      port: 25
+      protocol: smtp
+      auth:
+        username: "smtpuser"
+        password: "12345678"
+```
+These are all the other options that can be customized:
+
+```yaml
+stackstate:
+  email:
+    additionalProperties: 
+      # Add needed Java email properties for your mail server (use string values), defaults are: 
+      "mail.smtp.auth": "true"
+      "mail.smtp.starttls.enable": "true"
+    server:
+      protocol: smtp
+      port: 587
+```
+{% endtab %}
+{% endtabs %}
+
+
+To apply the changes, use the command: helm upgrade by passing --values values.yaml,
+
+This will use port `587` on the SMTP server and uses the `STARTTLS` command to establish a secure connection.
+
 
 Once the changes are applied, navigate to the SUSE Observability URL, then go to **Notifications** → **Add New Notification**. 
 Fill in the required details, select **Email** as the channel, and click **Add Channels** when you're done.
