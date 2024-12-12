@@ -17,7 +17,7 @@ SaaS users of SUSE Observability can use E-mail notifications without extra conf
 SUSE Observability needs to be configured with credentials to connect to the SMTP server. You can do this by adding the following to the `values.yaml` file of your SUSE Observability installation:
 
 {% tabs %}
-{% tab title="Chart version 2.2.0" %}
+{% tab title="Chart version 2.2.0/2.2.1" %}
 
 ```yaml
 stackstate:
