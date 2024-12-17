@@ -87,6 +87,11 @@ If your configuration is correct, you will receive a test email.
 ![image](https://github.com/user-attachments/assets/6034f6b4-9254-4005-844f-f6fe2c52436e)
 ![image](https://github.com/user-attachments/assets/bfef3caf-19c2-47eb-bad9-38913afeb984)
 
+### Using an external secret
+
+When the username and password cannot be provided in the values but should come from an external secret, follow [these steps](/setup/security/external-secrets.md#getting-username-and-password-for-email-sending-from-an-external-secret)
+
+
 **Troubleshooting**:- 
 1) If you encounter an error message when clicking the ▶️ TEST button, check the logs on your SMTP server, typically located under `/var/log/mail.log`. You should find some clues to help resolve the issue.
    
