@@ -34,8 +34,7 @@ The thing that stands out in this file is the Nginx annotation to increase the a
 Include the `ingress_values.yaml` file when you run the `helm upgrade` command to deploy SUSE Observability:
 
 ```text
-helm upgrade \
-  --install \
+helm upgrade --install \
   --namespace "suse-observability" \
   --values "ingress_values.yaml" \
   --values $VALUES_DIR/suse-observability-values/templates/baseConfig_values.yaml \
