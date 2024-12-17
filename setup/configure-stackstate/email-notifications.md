@@ -41,8 +41,9 @@ stackstate:
 ```
 
 ### Using an external secret
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; When the username and password cannot be provided in the values but should come from an external secret, follow [these steps](/setup/security/external-secrets.md#getting-username-and-password-for-email-sending-from-an-external-secret)
 
-When the username and password cannot be provided in the values but should come from an external secret, follow [these steps](/setup/security/external-secrets.md#getting-username-and-password-for-email-sending-from-an-external-secret)
+
 
 To apply the changes, use the command: helm upgrade by passing --values values.yaml,
 
@@ -63,12 +64,12 @@ If your configuration is correct, you will receive a test email.
 ![image](https://github.com/user-attachments/assets/bfef3caf-19c2-47eb-bad9-38913afeb984)
 
 
-**Troubleshooting**:- 
-1) If you encounter an error message when clicking the ▶️ TEST button, check the logs on your SMTP server, typically located under `/var/log/mail.log`. You should find some clues to help resolve the issue.
+### Troubleshooting
+1. If you encounter an error message when clicking the ▶️ TEST button, check the logs on your SMTP server, typically located under `/var/log/mail.log`. You should find some clues to help resolve the issue.
    
 ![image](https://github.com/user-attachments/assets/85af37e9-86ec-4668-9cbf-d8430d07071c)
 
-2) If you encounter the _disconnect from unknown_ error message in the SMTP server logs, you will need to add the cluster node IP to the `main.cf` configuration file.
+2. If you encounter the _disconnect from unknown_ error message in the SMTP server logs, you will need to add the cluster node IP to the `main.cf` configuration file.
    
 ```
     postfix/smtpd[7635]: disconnect from unknown[165.232.178.159] ehlo=2 starttls=1 mail=1 rcpt=0/1 rset=1 quit=1 commands=6/7 
@@ -78,11 +79,11 @@ If your configuration is correct, you will receive a test email.
     cat /etc/postfix/main.cf|grep -i mynetworks
     mynetworks = 127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128 165.232.178.159/32 165.232.190.163/32
 ```
-3) If you encounter the _Relay access denied_ error message in the SMTP server logs, The error message Relay access denied typically occurs when your Postfix SMTP server rejects an email due to misconfigured relay settings. 
+3. If you encounter the _Relay access denied_ error message in the SMTP server logs, The error message Relay access denied typically occurs when your Postfix SMTP server rejects an email due to misconfigured relay settings. 
 ```
    postfix/smtpd[6310]: NOQUEUE: reject: RCPT from unknown[165.232.178.159]: 454 4.7.1 Relay access denied; from=<example.com> to=<user1> proto=ESMTP helo=<suse-observability-server-8f6866c5d-46bth>
 ```
-   Try adding the domain to relay_domains in the `main.cf`: 
+     Try adding the domain to relay_domains in the `main.cf`: 
 ```
    relay_domains = example.com
 ```
