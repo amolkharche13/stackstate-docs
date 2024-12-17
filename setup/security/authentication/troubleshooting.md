@@ -4,7 +4,7 @@ description: SUSE Observability Self-hosted
 
 # Troubleshooting authentication and authorization
 
-When authentication or authorization fails it usually is due to a mismatch in the configuration of the provider and SUSE Observability. To make troubelshooting easier it is possible to enable debug logging on SUSE Observability for authentication and authorization specifically.
+When authentication or authorization fails it usually is due to a mismatch in the configuration of the provider and SUSE Observability. To make troubleshooting easier it is possible to enable debug logging on SUSE Observability for authentication and authorization specifically.
 
 {% hint style="warning" %}
 Disable the debug logging again as soon as your are done with troubleshooting, because it is very likely debug logging contains secrets and/or personal information.
