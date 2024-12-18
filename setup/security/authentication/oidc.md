@@ -12,9 +12,9 @@ SUSE Observability can authenticate using an OIDC authentication provider. To en
 
 Before you can configure SUSE Observability to authenticate using OIDC, you need to create a client for SUSE Observability on your OIDC provider. Use the following settings for the client \(if needed by the OIDC provider\):
 
-* Use the OIDCAuthoirzation Flow
-* Set the **Redirect URI** to the base URL of SUSE Observability suffixed with `/loginCallback`. For example `https://stackstate.acme.com/loginCallback`. For some OIDC providers, such as Google, the Redirect URI must match exactly, including any query parameters. In that case, you should configure the URI like this `https://stackstate.acme.com/loginCallback?client_name=StsOidcClient`.
-* Give SUSE Observability access to at least the scopes `openid` and `email` or the equivalent of these for your OIDC provider.
+* Use the OIDC Authorization Flow, it is also often called the Authorization code flow. SUSE Observability does not support the Implicit grant and hybrid flows, so there is no need to enable support for them.
+* Set the **Redirect URI** to the base URL of SUSE Observability suffixed with `/loginCallback`. For example `https://stackstate.acme.com/loginCallback`. For some OIDC providers, such as Google and Azure Entra ID, the Redirect URI must match exactly, including any query parameters. In that case, you should configure the URI like this `https://stackstate.acme.com/loginCallback?client_name=StsOidcClient`.
+* Give SUSE Observability access to at least the scopes `openid` and `email` or the equivalent of these for your OIDC provider. Depending on the provider more scopes may be required, if a separate `profile` exists include it as well.
 * SUSE Observability needs OIDC offline access. For some identity providers, this requires an extra scope, usually called `offline_access`.
 
 The result of this configuration should produce a **clientId** and a **secret**. Copy those and keep them around for configuring SUSE Observability. Also write down the **discoveryUri** of the provider. Usually this is either in the same screen or can be found in the documentation.
@@ -43,10 +43,10 @@ stackstate:
     # map the groups from OIDC provider
     # to the 4 standard roles in SUSE Observability (guest, powerUser, k8sTroubleshooter and admin)
     roles:
-      guest: ["oidc-guest-role-for-stackstate"]
-      powerUser: ["oidc-power-user-role-for-stackstate"]
-      admin: ["oidc-admin-role-for-stackstate"]
-      k8sTroubleshooter: ["oidc-troubleshooter-role-for-stackstate"]
+      guest: ["guest-group-in-oidc-provider"]
+      powerUser: ["powerUser-group-in-oidc-provider"]
+      admin: ["admin-group-in-oidc-provider"]
+      k8sTroubleshooter: ["troubleshooter-group-in-oidc-provider"]
 ```
 
 Follow the steps below to configure SUSE Observability to authenticate using OIDC:
@@ -84,29 +84,11 @@ Follow the steps below to configure SUSE Observability to authenticate using OID
 * The authentication configuration is stored as a Kubernetes secret.
 {% endhint %}
 
-## Additional settings for specific OIDC providers
+## Setup guides
 
-This section includes additional settings needed for specific OIDC providers.
+* [Microsoft Entra ID](./oidc/microsoft-entra-id.md)
 
-### Microsoft Identity Platform
-
-To authenticate SUSE Observability via OIDC with the Microsoft Identity Platform, the additional scope `offline_access` needs to be granted and requested during authentication.
-
-In Microsoft Azure, approve the permission _"Maintain access to data you have given it access to"_ on the consent page of the authorization code flow.
-
-In the SUSE Observability configuration described above, add the scope `offline_access`, in addition to `openid` and `email`. For example:
-
-```yaml
-jwsAlgorithm: RS256
-      scope: ["openid", "email", "offline_access"]
-      jwtClaims:
-        usernameField: preferred_username
-        groupsField: groups
-```
-
-For further details, see [Permissions and consent in the Microsoft identity platform \(learn.microsoft.com\)](https://learn.microsoft.com/en-us/azure/active-directory/develop/v2-permissions-and-consent).
-
-### Using an external secret
+## Using an external secret
 
 When the oidc secrets should come from an external secret, follow [these steps](/setup/security/external-secrets.md#getting-authentication-data-from-an-external-secret) but fill in the following data:
 
@@ -122,6 +104,7 @@ data:
 
 ## See also
 
+* [Troubleshooting authentication and authorization](troubleshooting.md)
 * [Authentication options](authentication_options.md)
 * [Permissions for predefined SUSE Observability roles](../rbac/rbac_permissions.md#predefined-roles)
 * [Create RBAC roles](../rbac/rbac_roles.md)
