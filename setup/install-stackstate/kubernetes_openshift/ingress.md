@@ -16,6 +16,10 @@ The SUSE Observability Helm chart exposes an `ingress` section in its values. Th
 
 To configure the ingress for SUSE Observability, create a file `ingress_values.yaml` with contents like below. Replace `MY_DOMAIN` with your own domain \(that's linked with your ingress controller\) and set the correct name for the `tls-secret`. Consult the documentation of your ingress controller for the correct annotations to set. All fields below are optional, for example, if no TLS will be used, omit that section but be aware that SUSE Observability also doesn't encrypt the traffic.
 
+{% hint style="warning" %}
+Note that setting up TLS is required for the use of the rancher UI extension.
+{% endhint %}
+
 ```text
 ingress:
   enabled: true
