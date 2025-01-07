@@ -29,7 +29,7 @@ The Non-HA setup can support up to 100 Nodes under observation.
 |                     | trial  | 10 non-HA | 20 non-HA | 50 non-HA | 100 non-HA | 150 HA | 250 HA  | 500 HA  |
 | ------------------- | ------ | --------- | --------- | --------- | ---------- | ------ | ------- | ------- |
 | **CPU Requests**    | 7.5    | 7.5       | 10.5      | 15        | 25         | 49     | 62      | 86.5    |
-| **CPU Limits**      | 16     | 16        | 21.5      | 30,5      | 50         | 103    | 128     | 176     |
+| **CPU Limits**      | 16     | 16        | 21.5      | 30.5      | 50         | 103    | 128     | 176     |
 | **Memory Requests** | 22.5Gi | 22.5Gi    | 28Gi      | 32Gi      | 51Gi       | 67Gi   | 143Gi   | 161.5Gi |
 | **Memory Limits**   | 23.5Gi | 23.5Gi    | 29Gi      | 33.5Gi    | 51.5Gi     | 131Gi  | 147.5Gi | 166Gi   |
 
