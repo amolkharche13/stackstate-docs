@@ -23,7 +23,9 @@ To install SUSE Observability, ensure that the nodes have enough CPU and memory 
 
 There are different installation options available for SUSE Observability. It is possible to install SUSE Observability either in a High-Availability (HA) or single instance (non-HA) setup. The non-HA setup is recommended for testing purposes or small environments. For production environments, it is recommended to install SUSE Observability in a HA setup.
 
-The HA production setup can support from 150 up to 500 Nodes (a Node is counted as<= 4 vCPU and <= 16GB Memory) under observation.
+The HA production setup can support from 150 up to 500 observed nodes. An observed node in this sizing table is taken to be 4 vCPUs and 16GB of memory, our `default node size`. 
+If nodes in your observed cluster are bigger, they can count for multiple `default nodes`, so a node of 12vCPU and 48GB counts as 3 `default nodes` under observation when picking
+a profile.
 The Non-HA setup can support up to 100 Nodes under observation.
 
 |                     | trial  | 10 non-HA | 20 non-HA | 50 non-HA | 100 non-HA | 150 HA | 250 HA  | 500 HA  |
